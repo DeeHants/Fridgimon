@@ -1,0 +1,17 @@
+<?xml version = "1.0"?>
+<!--  Enterprise Browser Custom Script definition file -->
+<!-- https://techdocs.zebra.com/enterprise-browser/1-8/guide/customize/script/ -->
+<CustomScripts>
+    <addItemScript>
+        document.addItem();
+    </addItemScript>
+    <checkItemScript>
+        document.checkItem();
+    </checkItemScript>
+    <listItemsScript>
+        document.listItems();
+    </listItemsScript>
+    <removeItemScript>
+        document.removeItem();
+    </removeItemScript>
+</CustomScripts>

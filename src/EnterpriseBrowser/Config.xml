@@ -79,6 +79,12 @@
     <DebugModeEnable value="1" />
   </DebugSetting>
 
+  <!-- Button bar -->
+  <FileLocations>
+    <buttonxmlfile value="file://%INSTALLDIR%/buttons.xml" />
+    <customxmlfile value="file://%INSTALLDIR%/buttonscripts.xml" />
+  </FileLocations>
+
   <!-- Default logging -->
   <Logger>
     <LogProtocol value="FILE" />
