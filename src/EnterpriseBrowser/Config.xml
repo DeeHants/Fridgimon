@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<!-- https://techdocs.zebra.com/enterprise-browser/1-8/guide/configreference/ -->
+<Configuration>
+  <EB_VERSION value="1.8.0.0" />
+
+  <Applications>
+    <Application>
+      <!-- Basic app info -->
+      <General>
+        <Name value="Fridgimon" />
+        <StartPage value="http://fridge.doesnotcompute.co.uk/" name="Home" />
+      </General>
+
+      <!-- Use intents for barcode input -->
+      <IntentReceiver>
+        <EnableReceiver value="0" />
+        <IntentAction value="" />
+        <IntentCategory value="" />
+      </IntentReceiver>
+
+      <!-- BASIC auth -->
+      <Authentication>
+        <Username VALUE="" />
+        <Password VALUE="" />
+      </Authentication>
+
+      <!-- Default styling -->
+      <HTMLStyles>
+        <FontFamily value="Droid Sans Fallback" />
+        <BackgroundColor value="" />
+      </HTMLStyles>
+
+      <Navigation>
+        <BadLinkURI value="file://%INSTALLDIR%/badlink.html" />
+        <NetworkCookieDatabase value="file://%INSTALLDIR%/cookies.db" />
+        <!-- No SSL yet -->
+        <VerifyPeerCertificate value="0" />
+      </Navigation>
+
+      <!-- EB crashes if any of these are omitted -->
+      <Sound>
+        <DecodeVolume value="" />
+        <DecodeFrequency value="" />
+        <DecodeDuration value="" />
+      </Sound>
+
+    </Application>
+  </Applications>
+
+  <!-- Full screen portrait, but show the nav bar -->
+  <Screen>
+    <FullScreen value="1" />
+    <PageZoom value="1.0" />
+    <EnableZoom value="0" />
+  </Screen>
+  <HideSystemBar value="0" />
+  <CustomKioskMode>
+    <setHomeKeyDisable value="0" />
+    <setStatusBarDisable value="0" />
+    <setBackKeyDisable value="0" />
+    <setVolumeButtonDisable value="0" />
+    <setRecentAppDisable value="0" />
+  </CustomKioskMode>
+  <ScreenOrientation>
+    <AutoRotate value="0" />
+  </ScreenOrientation>
+
+  <!-- Loading splash screen -->
+  <SplashScreen>
+    <SplashScreenPath value="file://%INSTALLDIR%/images/loading.png" />
+    <SplashScreenDuration value="3000" />
+  </SplashScreen>
+
+  <!-- Allow debugging -->
+  <DebugButtons>
+    <DebugButtonsEnabled value="0" />
+  </DebugButtons>
+  <DebugSetting>
+    <DebugModeEnable value="1" />
+  </DebugSetting>
+
+  <!-- Default logging -->
+  <Logger>
+    <LogProtocol value="FILE" />
+    <LogPort value="80" />
+    <LogURI value="file://%INSTALLDIR%/Log.txt" />
+    <LogError value="1" />
+    <LogWarning value="1" />
+    <LogInfo value="1" />
+    <LogTrace value="0" />
+    <LogUser value="0" />
+    <LogMemory value="0" />
+    <LogMemPeriod value="5000" />
+    <LogMaxSize value="5000" />
+  </Logger>
+
+  <!-- Settings button -->
+  <Settings>
+    <SettingsButtonEnabled value="1" />
+    <SettingsPageProtectionEnabled value="0" />
+    <SettingsPagePassword value="" />
+  </Settings>
+
+  <!-- Recreate shortcuts -->
+  <Shortcut>
+    <ShortcutCreationEnabled value="1" />
+  </Shortcut>
+
+  <!-- Add JS libs by default -->
+  <InjectEBLibraries>
+    <JSLibraries value="1" />
+  </InjectEBLibraries>
+</Configuration>
