@@ -105,9 +105,4 @@
   <Shortcut>
     <ShortcutCreationEnabled value="1" />
   </Shortcut>
-
-  <!-- Add JS libs by default -->
-  <InjectEBLibraries>
-    <JSLibraries value="1" />
-  </InjectEBLibraries>
 </Configuration>
