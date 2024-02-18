@@ -8,7 +8,7 @@
       <!-- Basic app info -->
       <General>
         <Name value="Fridgimon" />
-        <StartPage value="http://fridge.doesnotcompute.co.uk/" name="Home" />
+        <StartPage value="http://fridge.doesnotcompute.co.uk/eb/" name="Home" />
       </General>
 
       <!-- Use intents for barcode input -->
