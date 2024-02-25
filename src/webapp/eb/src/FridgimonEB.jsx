@@ -1,9 +1,12 @@
 // export default
-function FridgimonEB() {
+function FridgimonEB({ result, reader_error }) {
     return (
         <div>
             <h1>Fridgimon</h1>
-            <div id="display"></div>
+            <ReaderStatus
+                error={reader_error}
+                result={result}
+            />
         </div>
     );
 }
