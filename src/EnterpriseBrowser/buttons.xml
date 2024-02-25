@@ -2,29 +2,4 @@
 <!-- Enterprise Browser Button Configuration Parameter file -->
 <!-- https://techdocs.zebra.com/enterprise-browser/1-8/guide/customize/button/ -->
 <Buttonbargroup>
-    <ButtonBar1>
-        <barTop value="0" />
-        <Buttons>
-            <Button1>
-                <buttonText value="Add" />
-                <buttonActionClick value="runscript-addItemScript" />
-            </Button1>
-            <Button2>
-                <buttonText value="Check" />
-                <buttonActionClick value="runscript-checkItemScript" />
-            </Button2>
-            <Button3>
-                <buttonText value="List" />
-                <buttonActionClick value="runscript-listItemsScript" />
-            </Button3>
-            <Button4>
-                <buttonText value="Remove" />
-                <buttonActionClick value="runscript-removeItemScript" />
-            </Button4>
-            <Button5>
-                <buttonText value="Quit" />
-                <buttonActionClick value="quit" />
-            </Button5>
-        </Buttons>
-    </ButtonBar1>
 </Buttonbargroup>
