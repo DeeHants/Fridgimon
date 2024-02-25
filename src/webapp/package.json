@@ -1,0 +1,23 @@
+{
+  "name": "fridgimon",
+  "version": "1.0.0",
+  "description": "Fridgimon tracker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d lib",
+    "buildeb": "babel eb/src -d eb/lib"
+  },
+  "author": "Deanna Earley <dee@earlsoft.co.uk>",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.23.9",
+    "@babel/preset-react": "^7.23.3"
+  }
+}

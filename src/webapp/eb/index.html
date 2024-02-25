@@ -3,8 +3,12 @@
         <title>Fridgimon scanner</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <META HTTP-Equiv="ButtonBar1" content="visibility:visible">
+
         <script type="text/javascript" charset="utf-8" src="ebapi-modules.js"></script>
         <script type="text/javascript" charset="utf-8" src="elements.js"></script>
+
+
+        <script type="text/javascript" charset="utf-8" src="lib/FridgimonEB.js"></script>
         <script type="text/javascript">
             // Document handling
             window.addEventListener('DOMContentLoaded', loadEvent);
@@ -12,6 +16,7 @@
 
             function loadEvent(){
                 initScanner();
+                initReactApp();
             }
 
             function unloadEvent(){
@@ -74,12 +79,18 @@
                     },
                 });
             }
+
+            // React app/components
+            function initReactApp(){
+                const container = document.getElementById('app');
+                const root = ReactDOM.createRoot(container);
+                root.render(FridgimonEB());
+            }
         </script>
     </head>
 
     <body>
         <br/><br/>
-        <h1>Fridgimon</h1>
-        <div id="display"></div>
+        <div id="app"></div>
     </body>
 </html>
