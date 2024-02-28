@@ -77,14 +77,17 @@
             // React app/components
             var appContainer;
             var appRoot;
+            var appElement;
             function initReactApp(){
                 appContainer = document.getElementById('app');
                 appRoot = ReactDOM.createRoot(appContainer);
-                appRoot.render(FridgimonEB({}));
+                appElement = React.createElement(FridgimonEB, {});
+                appRoot.render(appElement);
             }
 
             function updateReactApp(state){
-                appRoot.render(FridgimonEB(state));
+                appElement = React.createElement(FridgimonEB, state);
+                appRoot.render(appElement);
             }
         </script>
     </head>
