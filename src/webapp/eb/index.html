@@ -12,6 +12,7 @@
 
         <script type="text/javascript" charset="utf-8" src="lib/FridgimonEB.js"></script>
         <script type="text/javascript" charset="utf-8" src="lib/ReaderStatus.js"></script>
+        <script type="text/javascript" charset="utf-8" src="lib/ScanResult.js"></script>
         <script type="text/javascript">
             // Document handling
             window.addEventListener('DOMContentLoaded', loadEvent);
@@ -58,6 +59,7 @@
                         if (!data['found']) {
                             updateReactApp({
                                 reader_error: "No result for " + lookup_upc,
+                                result: data,
                             });
                         } else {
                             var lookup_name = data['name'];
@@ -69,6 +71,9 @@
                     error: function(jqXHR, errorText, errorThrown) {
                         updateReactApp({
                             reader_error: "Unable to lookup " + scan_upc,
+                            result: {
+                                upc: scan_upc,
+                            }
                         });
                     },
                 });

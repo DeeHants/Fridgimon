@@ -1,8 +1,8 @@
-function ReaderStatus({ result, error }) {
+function ReaderStatus({ error }) {
+    if (!error) return null;
     return (
         <div>
-            {error && <span style={{ color: "red" }}>{error}</span>}
-            {result && <span>{result.name}</span>}
+            <span style={{ color: "red" }}>{error}</span>
         </div>
     );
 }
