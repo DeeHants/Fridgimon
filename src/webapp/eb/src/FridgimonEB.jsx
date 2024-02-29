@@ -3,6 +3,34 @@ function FridgimonEB() {
     const [error, setError] = React.useState(null);
     const [scannerResult, setScannerResult] = React.useState(null);
 
+    const [items, setItems] = React.useState([
+        {
+            "content_id": 1,
+            "upc": "5060947546080",
+            "name": "Monster - Pipeline punch",
+        },
+        {
+            "content_id": 2,
+            "upc": "5060947546080",
+            "name": "Monster - Pipeline punch",
+        },
+        {
+            "content_id": 7,
+            "upc": "5000128104517",
+            "name": "Whole milk, 4 pint - Co-op",
+        },
+        {
+            "content_id": 8,
+            "upc": "5000128104517",
+            "name": "Whole milk, 4 pint - Co-op",
+        },
+        {
+            "content_id": 9,
+            "upc": "5060947547360",
+            "name": "Monster - Khaotic",
+        },
+    ]);
+
     return (
         <div>
             {/* Invisible component to manage the reader */}
@@ -18,9 +46,20 @@ function FridgimonEB() {
                     setError("");
                 }}
             />
-            {scannerResult && <ScanResult
-                result={scannerResult}
-            />}
+
+            {scannerResult &&
+                <ScannedItem
+                    key={scannerResult.upc}
+                    item={scannerResult}
+                    onClear={() => { setScannerResult() }}
+                />}
+
+            {items.map(item => (
+                <LineItem
+                    key={item.content_id}
+                    item={item}
+                />
+            ))}
         </div>
     );
 }

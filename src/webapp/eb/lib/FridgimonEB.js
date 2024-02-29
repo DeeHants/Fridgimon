@@ -16,6 +16,30 @@ function FridgimonEB() {
     _React$useState4 = _slicedToArray(_React$useState3, 2),
     scannerResult = _React$useState4[0],
     setScannerResult = _React$useState4[1];
+  var _React$useState5 = React.useState([{
+      "content_id": 1,
+      "upc": "5060947546080",
+      "name": "Monster - Pipeline punch"
+    }, {
+      "content_id": 2,
+      "upc": "5060947546080",
+      "name": "Monster - Pipeline punch"
+    }, {
+      "content_id": 7,
+      "upc": "5000128104517",
+      "name": "Whole milk, 4 pint - Co-op"
+    }, {
+      "content_id": 8,
+      "upc": "5000128104517",
+      "name": "Whole milk, 4 pint - Co-op"
+    }, {
+      "content_id": 9,
+      "upc": "5060947547360",
+      "name": "Monster - Khaotic"
+    }]),
+    _React$useState6 = _slicedToArray(_React$useState5, 2),
+    items = _React$useState6[0],
+    setItems = _React$useState6[1];
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Reader, {
     onError: setError,
     onScan: setScannerResult
@@ -24,7 +48,16 @@ function FridgimonEB() {
     onDismiss: function onDismiss() {
       setError("");
     }
-  }), scannerResult && /*#__PURE__*/React.createElement(ScanResult, {
-    result: scannerResult
+  }), scannerResult && /*#__PURE__*/React.createElement(ScannedItem, {
+    key: scannerResult.upc,
+    item: scannerResult,
+    onClear: function onClear() {
+      setScannerResult();
+    }
+  }), items.map(function (item) {
+    return /*#__PURE__*/React.createElement(LineItem, {
+      key: item.content_id,
+      item: item
+    });
   }));
 }
