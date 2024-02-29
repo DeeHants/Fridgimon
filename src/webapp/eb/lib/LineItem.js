@@ -12,5 +12,7 @@ function LineItem(_ref) {
     className: "itemUpc"
   }, item.upc), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("span", {
     className: "itemName"
-  }, item.name || "Unknown"), children && /*#__PURE__*/React.createElement("br", null), children);
+  }, item.name || "Unknown"), /*#__PURE__*/React.createElement("br", null), item.expiry && /*#__PURE__*/React.createElement("span", {
+    className: "itemExpiry"
+  }, item.expiry), children && /*#__PURE__*/React.createElement("br", null), children);
 }

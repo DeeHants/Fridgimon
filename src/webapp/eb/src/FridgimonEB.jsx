@@ -18,11 +18,13 @@ function FridgimonEB() {
             "content_id": 7,
             "upc": "5000128104517",
             "name": "Whole milk, 4 pint - Co-op",
+            "expiry": "2024-02-23"
         },
         {
             "content_id": 8,
             "upc": "5000128104517",
             "name": "Whole milk, 4 pint - Co-op",
+            "expiry": "2024-03-02"
         },
         {
             "content_id": 9,
