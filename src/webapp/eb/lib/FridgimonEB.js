@@ -8,15 +8,19 @@ function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" !=
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function FridgimonEB() {
   // Page state
-  var _React$useState = React.useState(null),
+  var _React$useState = React.useState(false),
     _React$useState2 = _slicedToArray(_React$useState, 2),
-    error = _React$useState2[0],
-    setError = _React$useState2[1];
+    isBusy = _React$useState2[0],
+    setBusy = _React$useState2[1];
   var _React$useState3 = React.useState(null),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
-    scannerResult = _React$useState4[0],
-    setScannerResult = _React$useState4[1];
-  var _React$useState5 = React.useState([{
+    error = _React$useState4[0],
+    setError = _React$useState4[1];
+  var _React$useState5 = React.useState(null),
+    _React$useState6 = _slicedToArray(_React$useState5, 2),
+    scannerResult = _React$useState6[0],
+    setScannerResult = _React$useState6[1];
+  var _React$useState7 = React.useState([{
       "content_id": 1,
       "upc": "5060947546080",
       "name": "Monster - Pipeline punch"
@@ -39,10 +43,12 @@ function FridgimonEB() {
       "upc": "5060947547360",
       "name": "Monster - Khaotic"
     }]),
-    _React$useState6 = _slicedToArray(_React$useState5, 2),
-    items = _React$useState6[0],
-    setItems = _React$useState6[1];
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Reader, {
+    _React$useState8 = _slicedToArray(_React$useState7, 2),
+    items = _React$useState8[0],
+    setItems = _React$useState8[1];
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Busy, {
+    isBusy: isBusy
+  }), /*#__PURE__*/React.createElement(Reader, {
     onError: setError,
     onScan: setScannerResult
   }), /*#__PURE__*/React.createElement("h1", null, "Fridgimon"), /*#__PURE__*/React.createElement(ReaderStatus, {
