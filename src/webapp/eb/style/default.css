@@ -1,0 +1,18 @@
+html,
+body {
+    font-family: sans-serif;
+}
+
+.item {
+    border-bottom: 1px solid black;
+    min-height: 50px;
+}
+
+.item:first-of-type {
+    border-top: 1px solid black;
+}
+
+.item .itemName {
+    font-weight: bold;
+    font-size: larger;
+}
