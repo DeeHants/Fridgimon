@@ -23,23 +23,21 @@ function Reader({ onError, onScan }) {
         var scan_source = params['source'];
         var scan_type = params['type'];
 
-        EB.jQuery.ajax({
-            url: "/api/lookup?code=" + params['data'],
-            async: true,
-            dataType: 'json',
-            success: function (data, status, jqXHR) {
-                var lookup_upc = data['upc'];
-                if (!data['found']) {
-                    onError("No result for " + lookup_upc);
-                }
-                onScan(data);
-            },
-            error: function (jqXHR, errorText, errorThrown) {
+        api_lookup({
+            code: params['data'],
+        }, function (data, _error) {
+            if (!data) {
                 onError("Unable to lookup " + scan_upc);
-                onScan({
+                data = {
                     upc: scan_upc,
-                });
+                }
+            } else if (!data['found']) {
+                var lookup_upc = data['upc'];
+                onError("No result for " + lookup_upc);
             }
+
+            // Return the scan results
+            onScan(data);
         });
     }
 
