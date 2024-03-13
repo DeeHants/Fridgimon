@@ -22,7 +22,6 @@ function LineItem({ item, marker, children, actions }) {
             <div className="itemUpc">{item.upc}</div>
             {item.expiry && (<div className="itemExpiry">{item.expiry}</div>)}
 
-            {children && <br />}
             {children}
         </div>
     );

@@ -28,5 +28,5 @@ function LineItem(_ref) {
     className: "itemUpc"
   }, item.upc), item.expiry && /*#__PURE__*/React.createElement("div", {
     className: "itemExpiry"
-  }, item.expiry), children && /*#__PURE__*/React.createElement("br", null), children);
+  }, item.expiry), children);
 }
