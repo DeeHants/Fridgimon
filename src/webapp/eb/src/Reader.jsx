@@ -23,22 +23,7 @@ function Reader({ onError, onScan }) {
         var scan_source = params['source'];
         var scan_type = params['type'];
 
-        api_lookup({
-            code: params['data'],
-        }, function (data, _error) {
-            if (!data) {
-                onError("Unable to lookup " + scan_upc);
-                data = {
-                    upc: scan_upc,
-                }
-            } else if (!data['found']) {
-                var lookup_upc = data['upc'];
-                onError("No result for " + lookup_upc);
-            }
-
-            // Return the scan results
-            onScan(data);
-        });
+        onScan(scan_upc, scan_source, scan_type);
     }
 
     // No visible component

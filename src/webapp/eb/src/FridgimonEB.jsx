@@ -34,13 +34,32 @@ function FridgimonEB() {
         },
     ]);
 
+    // Handle scan events
+    function lookupItem(scan_upc, _scan_source, _scan_type) {
+        api_lookup({
+            code: scan_upc,
+        }, function (data, _error) {
+            if (!data) {
+                setError("Unable to lookup " + scan_upc);
+                data = {
+                    upc: scan_upc,
+                }
+            } else if (!data['found']) {
+                setError("No result for " + scan_upc);
+            }
+
+            // Update the scan results
+            setScannerResult(data);
+        });
+    }
+
     return (
         <>
             <Busy isBusy={isBusy} />
             {/* Invisible component to manage the reader */}
             <Reader
                 onError={setError}
-                onScan={setScannerResult}
+                onScan={lookupItem}
             />
 
             <h1>Fridgimon</h1>

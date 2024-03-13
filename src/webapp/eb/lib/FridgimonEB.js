@@ -46,11 +46,30 @@ function FridgimonEB() {
     _React$useState8 = _slicedToArray(_React$useState7, 2),
     items = _React$useState8[0],
     setItems = _React$useState8[1];
+
+  // Handle scan events
+  function lookupItem(scan_upc, _scan_source, _scan_type) {
+    api_lookup({
+      code: scan_upc
+    }, function (data, _error) {
+      if (!data) {
+        setError("Unable to lookup " + scan_upc);
+        data = {
+          upc: scan_upc
+        };
+      } else if (!data['found']) {
+        setError("No result for " + scan_upc);
+      }
+
+      // Update the scan results
+      setScannerResult(data);
+    });
+  }
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Busy, {
     isBusy: isBusy
   }), /*#__PURE__*/React.createElement(Reader, {
     onError: setError,
-    onScan: setScannerResult
+    onScan: lookupItem
   }), /*#__PURE__*/React.createElement("h1", null, "Fridgimon"), /*#__PURE__*/React.createElement(ReaderStatus, {
     error: error,
     onDismiss: function onDismiss() {
