@@ -41,6 +41,31 @@ switch ($_SERVER['REDIRECT_URL']) {
         break;
     }
 
+    case "/api/contents": {
+        if ($_GET['upc']) {
+            $stmt = $mysqli->prepare("SELECT `content_id`, `upc`, `contents`.`item_id`, `name`, `container_id` as `container`, `added`, `expiry` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE `upc`=?");
+            $stmt->bind_param("s", $_GET['upc']);
+        } else {
+            $stmt = $mysqli->prepare("SELECT `content_id`, `upc`, `contents`.`item_id`, `name`, `container_id` as `container`, `added`, `expiry` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`");
+        }
+        // die($mysqli->error);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        while($row = $result->fetch_assoc()) {
+            if ($row['expiry'] != '') {
+                $expiry_date = new DateTime($row['expiry']);
+                $current_date = new DateTime();
+                $interval = $current_date->diff($expiry_date, false);
+                $days_left = $interval->d * ($interval->invert ? -1 : 1);
+                $row['days_left'] = $days_left;
+                $row['expired'] = $days_left < 0;
+            }
+            $response[] = $row;
+        }
+        break;
+    }
+
     default: {
         $status = "400";
         $error = "API not found";

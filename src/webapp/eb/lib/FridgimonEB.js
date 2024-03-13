@@ -20,29 +20,7 @@ function FridgimonEB() {
     _React$useState6 = _slicedToArray(_React$useState5, 2),
     scannerResult = _React$useState6[0],
     setScannerResult = _React$useState6[1];
-  var _React$useState7 = React.useState([{
-      "content_id": 1,
-      "upc": "5060947546080",
-      "name": "Monster - Pipeline punch"
-    }, {
-      "content_id": 2,
-      "upc": "5060947546080",
-      "name": "Monster - Pipeline punch"
-    }, {
-      "content_id": 7,
-      "upc": "5000128104517",
-      "name": "Whole milk, 4 pint - Co-op",
-      "expiry": "2024-02-23"
-    }, {
-      "content_id": 8,
-      "upc": "5000128104517",
-      "name": "Whole milk, 4 pint - Co-op",
-      "expiry": "2024-03-02"
-    }, {
-      "content_id": 9,
-      "upc": "5060947547360",
-      "name": "Monster - Khaotic"
-    }]),
+  var _React$useState7 = React.useState([]),
     _React$useState8 = _slicedToArray(_React$useState7, 2),
     items = _React$useState8[0],
     setItems = _React$useState8[1];
@@ -63,12 +41,31 @@ function FridgimonEB() {
 
       // Update the scan results
       setScannerResult(data);
+      refreshItems({
+        upc: data.upc
+      });
+    });
+  }
+
+  // Contents
+  React.useEffect(function () {
+    refreshItems();
+  }, []);
+  function refreshItems(filter) {
+    setBusy(true);
+    api_contents(filter, function (data, _error) {
+      if (!data) {
+        setError("Unable to get contents");
+        data = [];
+      }
+      setItems(data);
+      setBusy(false);
     });
   }
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Busy, {
     isBusy: isBusy
   }), /*#__PURE__*/React.createElement(Reader, {
-    onError: setError,
+    setError: setError,
     onScan: lookupItem
   }), /*#__PURE__*/React.createElement("h1", null, "Fridgimon"), /*#__PURE__*/React.createElement(ReaderStatus, {
     error: error,
@@ -80,6 +77,7 @@ function FridgimonEB() {
     item: scannerResult,
     onClear: function onClear() {
       setScannerResult();
+      refreshItems();
     }
   }), items.map(function (item) {
     return /*#__PURE__*/React.createElement(LineItem, {

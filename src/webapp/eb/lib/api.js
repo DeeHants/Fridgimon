@@ -3,6 +3,13 @@
 function api_lookup(query, onComplete) {
   api_call("/api/lookup?code=" + query['code'], onComplete);
 }
+function api_contents(filter, onComplete) {
+  var filter_string = "?";
+  if (filter && filter.upc) {
+    filter_string = filter_string + "upc=" + encodeURIComponent(filter.upc);
+  }
+  api_call("/api/contents" + filter_string, onComplete);
+}
 function api_call(url, onComplete) {
   EB.jQuery.ajax({
     url: url,
