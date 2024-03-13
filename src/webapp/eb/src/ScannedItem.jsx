@@ -5,7 +5,10 @@ function ScannedItem({ item, onClear }) {
                 <button onClick={onClear}>Clear</button>
             </div>
 
-            <LineItem item={item} >
+            <LineItem
+                item={item}
+                marker="lightgrey"
+            >
             </LineItem>
         </>
     )

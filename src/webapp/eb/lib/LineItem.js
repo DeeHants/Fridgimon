@@ -2,9 +2,18 @@
 
 function LineItem(_ref) {
   var item = _ref.item,
+    marker = _ref.marker,
     children = _ref.children;
+  // Create the marker colour style
+  if (!marker) {
+    marker = !item.expiry ? undefined : item.expired ? "red" : item.days_left < 2 ? "orange" : "green";
+  }
+  var item_style = marker ? {
+    borderLeftColor: marker
+  } : undefined;
   return /*#__PURE__*/React.createElement("div", {
-    className: "item"
+    className: "item",
+    style: item_style
   }, /*#__PURE__*/React.createElement("div", {
     className: "itemName"
   }, item.name || "Unknown"), /*#__PURE__*/React.createElement("div", {

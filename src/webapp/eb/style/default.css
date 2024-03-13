@@ -5,6 +5,8 @@ body {
 
 .item {
     border-bottom: 1px solid black;
+    border-left: 5px solid white;
+    padding-left: 2px;
     min-height: 50px;
 }
 

@@ -6,6 +6,7 @@ function ScannedItem(_ref) {
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     onClick: onClear
   }, "Clear")), /*#__PURE__*/React.createElement(LineItem, {
-    item: item
+    item: item,
+    marker: "lightgrey"
   }));
 }
