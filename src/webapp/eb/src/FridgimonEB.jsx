@@ -35,7 +35,7 @@ function FridgimonEB() {
     ]);
 
     return (
-        <div>
+        <>
             <Busy isBusy={isBusy} />
             {/* Invisible component to manage the reader */}
             <Reader
@@ -64,6 +64,6 @@ function FridgimonEB() {
                     item={item}
                 />
             ))}
-        </div>
+        </>
     );
 }

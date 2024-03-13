@@ -46,7 +46,7 @@ function FridgimonEB() {
     _React$useState8 = _slicedToArray(_React$useState7, 2),
     items = _React$useState8[0],
     setItems = _React$useState8[1];
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Busy, {
+  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Busy, {
     isBusy: isBusy
   }), /*#__PURE__*/React.createElement(Reader, {
     onError: setError,
