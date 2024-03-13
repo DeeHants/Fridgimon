@@ -1,20 +1,31 @@
 function api_lookup(query, onComplete) {
     api_call(
-        "/api/lookup?code=" + query['code'],
+        "lookup",
+        query,
         onComplete
     );
 }
 
 function api_contents(filter, onComplete) {
-    var filter_string = "?";
-    if (filter && filter.upc) { filter_string = filter_string + "upc=" + encodeURIComponent(filter.upc) }
     api_call(
-        "/api/contents" + filter_string,
+        "contents",
+        filter,
         onComplete
     );
 }
 
-function api_call(url, onComplete) {
+function api_call(method, parameters, onComplete) {
+    // Build the parameter string
+    var parameter_string = "";
+    for (var key in parameters) {
+        parameter_string += (parameter_string == "" ? "" : "&")
+        parameter_string += key + "=" + encodeURIComponent(parameters[key])
+    }
+    parameter_string = (parameter_string != "" ? "?" : "") + parameter_string
+    // and full URL
+    var url = "/api/" + method + parameter_string;
+
+    // and get!
     EB.jQuery.ajax({
         url: url,
         async: true,
