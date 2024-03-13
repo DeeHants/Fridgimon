@@ -18,3 +18,8 @@ body {
     font-weight: bold;
     font-size: larger;
 }
+
+.item .itemActions {
+    float: right;
+    padding-top: 5px
+}

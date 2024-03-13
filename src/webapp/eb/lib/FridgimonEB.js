@@ -65,7 +65,10 @@ function FridgimonEB() {
   }), items.map(function (item) {
     return /*#__PURE__*/React.createElement(LineItem, {
       key: item.content_id,
-      item: item
+      item: item,
+      actions: [{
+        caption: "Remove"
+      }]
     });
   }));
 }

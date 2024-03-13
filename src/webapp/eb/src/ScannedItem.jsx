@@ -8,6 +8,12 @@ function ScannedItem({ item, onClear }) {
             <LineItem
                 item={item}
                 marker="lightgrey"
+                actions={[
+                    {
+                        caption: "Store",
+                        disabled: !item.found,
+                    }
+                ]}
             >
             </LineItem>
         </>

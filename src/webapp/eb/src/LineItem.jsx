@@ -1,4 +1,4 @@
-function LineItem({ item, marker, children }) {
+function LineItem({ item, marker, children, actions }) {
     // Create the marker colour style
     if (!marker) {
         marker = !item.expiry ? undefined :
@@ -10,6 +10,14 @@ function LineItem({ item, marker, children }) {
 
     return (
         <div className="item" style={item_style}>
+            {actions && (
+                <div className="itemActions">
+                    {actions.map((action, index) => (
+                        <LineItemAction key={index} action={action} />
+                    ))}
+                </div>
+            )}
+
             <div className="itemName">{item.name || "Unknown"}</div>
             <div className="itemUpc">{item.upc}</div>
             {item.expiry && (<div className="itemExpiry">{item.expiry}</div>)}

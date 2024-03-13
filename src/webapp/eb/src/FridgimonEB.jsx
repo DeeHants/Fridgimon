@@ -62,6 +62,11 @@ function FridgimonEB() {
                 <LineItem
                     key={item.content_id}
                     item={item}
+                    actions={[
+                        {
+                            caption: "Remove",
+                        },
+                    ]}
                 />
             ))}
         </>

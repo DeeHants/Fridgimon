@@ -7,6 +7,10 @@ function ScannedItem(_ref) {
     onClick: onClear
   }, "Clear")), /*#__PURE__*/React.createElement(LineItem, {
     item: item,
-    marker: "lightgrey"
+    marker: "lightgrey",
+    actions: [{
+      caption: "Store",
+      disabled: !item.found
+    }]
   }));
 }
