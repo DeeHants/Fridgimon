@@ -90,7 +90,8 @@ function FridgimonEB() {
       key: item.content_id,
       item: item,
       actions: [{
-        caption: "Remove"
+        caption: "Remove",
+        disabled: true
       }]
     });
   }));

@@ -88,6 +88,7 @@ function FridgimonEB() {
                     actions={[
                         {
                             caption: "Remove",
+                            disabled: true,
                         },
                     ]}
                 />
