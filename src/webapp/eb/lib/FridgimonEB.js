@@ -35,8 +35,6 @@ function FridgimonEB() {
         data = {
           upc: scan_upc
         };
-      } else if (!data['found']) {
-        setError("No result for " + scan_upc);
       }
 
       // Update the scan results
@@ -79,7 +77,10 @@ function FridgimonEB() {
       setScannerResult();
       refreshItems();
     },
-    onRefresh: function onRefresh() {
+    onRefresh: function onRefresh(new_item) {
+      if (new_item) {
+        setScannerResult(new_item);
+      }
       refreshItems({
         upc: scannerResult.upc
       });

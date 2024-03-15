@@ -78,6 +78,27 @@ switch ($_SERVER['REDIRECT_URL']) {
         break;
     }
 
+    case "/api/register": {
+        $stmt = $mysqli->prepare("INSERT INTO `items` (`upc`, `name`, `life`) VALUES (?, ?, 1)");
+        $stmt->bind_param("ss",
+            $_GET['upc'],
+            $_GET['name']
+        );
+        $stmt->execute();
+
+        $id = $mysqli->insert_id;
+        // Get the new record
+        $stmt = $mysqli->prepare("SELECT `item_id`, `upc`, `name`, `life` FROM `items` WHERE item_id=?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $response =  $result->fetch_assoc();
+        $response['found'] = true;
+        $response['expires'] = $response['life'] != "";
+        break;
+    }
+
     default: {
         $status = "400";
         $error = "API not found";

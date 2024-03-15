@@ -10,6 +10,23 @@ function ScannedItem(_ref) {
   var item = _ref.item,
     onClear = _ref.onClear,
     onRefresh = _ref.onRefresh;
+  // New item
+  var _React$useState = React.useState(""),
+    _React$useState2 = _slicedToArray(_React$useState, 2),
+    itemName = _React$useState2[0],
+    setItemName = _React$useState2[1];
+  function registerItem() {
+    api_register({
+      upc: item.upc,
+      name: itemName
+    }, function (data, _error) {
+      if (!data) {
+        setError("Unable to register item");
+      }
+      onRefresh(data);
+    });
+  }
+
   // Expiry date
   var current_date = new Date();
   var current_date_string = current_date.toISOString().substring(0, 10);
@@ -19,10 +36,10 @@ function ScannedItem(_ref) {
     expiry_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() + item.life);
     expiry_date_string = expiry_date.toISOString().substring(0, 10);
   }
-  var _React$useState = React.useState(expiry_date_string),
-    _React$useState2 = _slicedToArray(_React$useState, 2),
-    expiryValue = _React$useState2[0],
-    setExpiryValue = _React$useState2[1];
+  var _React$useState3 = React.useState(expiry_date_string),
+    _React$useState4 = _slicedToArray(_React$useState3, 2),
+    expiryValue = _React$useState4[0],
+    setExpiryValue = _React$useState4[1];
   function storeItem() {
     api_store(item.item_id, item.expires ? expiryValue : undefined, function (data, _error) {
       if (!data) {
@@ -33,12 +50,26 @@ function ScannedItem(_ref) {
   }
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
     onClick: onClear
-  }, "Clear")), /*#__PURE__*/React.createElement(LineItem, {
+  }, "Clear")), !item.found && /*#__PURE__*/React.createElement(LineItem, {
+    item: item,
+    marker: "lightgrey",
+    actions: [{
+      caption: "Register",
+      onClick: registerItem
+    }]
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "itemNameEntry"
+  }, /*#__PURE__*/React.createElement("label", null, "Name "), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: itemName,
+    onChange: function onChange(e) {
+      return setItemName(e.target.value);
+    }
+  }))), item.found && /*#__PURE__*/React.createElement(LineItem, {
     item: item,
     marker: "lightgrey",
     actions: [{
       caption: "Store",
-      disabled: !item.found,
       onClick: storeItem
     }]
   }, item.expires && /*#__PURE__*/React.createElement("div", {
