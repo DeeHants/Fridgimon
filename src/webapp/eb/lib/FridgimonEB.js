@@ -78,6 +78,11 @@ function FridgimonEB() {
     onClear: function onClear() {
       setScannerResult();
       refreshItems();
+    },
+    onRefresh: function onRefresh() {
+      refreshItems({
+        upc: scannerResult.upc
+      });
     }
   }), items.map(function (item) {
     return /*#__PURE__*/React.createElement(LineItem, {

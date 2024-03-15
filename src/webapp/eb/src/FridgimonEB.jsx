@@ -75,6 +75,9 @@ function FridgimonEB() {
                         setScannerResult();
                         refreshItems();
                     }}
+                    onRefresh={() => {
+                        refreshItems({ upc: scannerResult.upc })
+                    }}
                 />}
 
             {items.map(item => (

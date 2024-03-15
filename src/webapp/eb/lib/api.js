@@ -6,6 +6,15 @@ function api_lookup(query, onComplete) {
 function api_contents(filter, onComplete) {
   api_call("contents", filter, onComplete);
 }
+function api_store(item_id, expiry_date, onComplete) {
+  var parameters = {
+    item_id: item_id
+  };
+  if (expiry_date) {
+    parameters['expiry'] = expiry_date;
+  }
+  api_call("store", parameters, onComplete);
+}
 function api_call(method, parameters, onComplete) {
   // Build the parameter string
   var parameter_string = "";

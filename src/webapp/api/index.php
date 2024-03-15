@@ -29,8 +29,10 @@ switch ($_SERVER['REDIRECT_URL']) {
             $response = array(
                 upc => $_GET['code'],
                 found => true,
-                id => $row['item_id'],
+                item_id => $row['item_id'],
                 name => $row['name'],
+                expires => $row['life'] != "",
+                life => $row['life'],
             );
         } else {
             $response = array(
@@ -63,6 +65,16 @@ switch ($_SERVER['REDIRECT_URL']) {
             }
             $response[] = $row;
         }
+        break;
+    }
+
+    case "/api/store": {
+        $stmt = $mysqli->prepare("INSERT INTO `contents` (`item_id`, `container_id`, `expiry`) VALUES (?, 1, ?)");
+        $stmt->bind_param("is",
+            $_GET['item_id'],
+            $_GET['expiry']
+        );
+        $stmt->execute();
         break;
     }
 
