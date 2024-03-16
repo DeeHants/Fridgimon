@@ -38,7 +38,7 @@ function api_call(method, parameters, onComplete) {
       onComplete(data, undefined);
     },
     error: function error(_jqXHR, errorText, _errorThrown) {
-      onComplete(data, errorText);
+      onComplete(undefined, errorText);
     }
   });
 }
