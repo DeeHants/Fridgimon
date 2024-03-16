@@ -12,7 +12,7 @@ switch ($_SERVER['REDIRECT_URL']) {
     // Hello world, test API
     case "/api/hello": {
         $response = array(
-            hello => "Hello " . $_SERVER['REMOTE_ADDR'],
+            'hello' => "Hello " . $_SERVER['REMOTE_ADDR'],
         );
         break;
     }
@@ -27,17 +27,17 @@ switch ($_SERVER['REDIRECT_URL']) {
         $row = $result->fetch_assoc();
         if ($row) {
             $response = array(
-                code => $_GET['code'],
-                found => true,
-                item_id => $row['item_id'],
-                name => $row['name'],
-                expires => $row['life'] != "",
-                life => $row['life'],
+                'code' => $_GET['code'],
+                'found' => true,
+                'item_id' => $row['item_id'],
+                'name' => $row['name'],
+                'expires' => $row['life'] != "",
+                'life' => $row['life'],
             );
         } else {
             $response = array(
-                code => $_GET['code'],
-                found => false,
+                'code' => $_GET['code'],
+                'found' => false,
             );
         }
         break;
@@ -108,7 +108,7 @@ switch ($_SERVER['REDIRECT_URL']) {
 // If there was an error, create the response
 if ($error) {
     $response = array(
-        error => $error,
+        'error' => $error,
     );
 }
 
