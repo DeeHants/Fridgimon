@@ -25,8 +25,8 @@ function LineItem(_ref) {
   })), /*#__PURE__*/React.createElement("div", {
     className: "itemName"
   }, item.name || "Unknown"), /*#__PURE__*/React.createElement("div", {
-    className: "itemUpc"
-  }, item.upc), item.expiry && /*#__PURE__*/React.createElement("div", {
+    className: "itemCode"
+  }, item.code), item.expiry && /*#__PURE__*/React.createElement("div", {
     className: "itemExpiry"
   }, item.expiry), children);
 }

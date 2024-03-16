@@ -26,21 +26,21 @@ function FridgimonEB() {
     setItems = _React$useState8[1];
 
   // Handle scan events
-  function lookupItem(scan_upc, _scan_source, _scan_type) {
+  function lookupItem(scan_data, _scan_source, _scan_type) {
     api_lookup({
-      code: scan_upc
+      code: scan_data
     }, function (data, _error) {
       if (!data) {
-        setError("Unable to lookup " + scan_upc);
+        setError("Unable to lookup " + scan_data);
         data = {
-          upc: scan_upc
+          code: scan_data
         };
       }
 
       // Update the scan results
       setScannerResult(data);
       refreshItems({
-        upc: data.upc
+        code: data.code
       });
     });
   }
@@ -71,7 +71,7 @@ function FridgimonEB() {
       setError("");
     }
   }), scannerResult && /*#__PURE__*/React.createElement(ScannedItem, {
-    key: scannerResult.upc,
+    key: scannerResult.code,
     item: scannerResult,
     onClear: function onClear() {
       setScannerResult();
@@ -82,7 +82,7 @@ function FridgimonEB() {
         setScannerResult(new_item);
       }
       refreshItems({
-        upc: scannerResult.upc
+        code: scannerResult.code
       });
     }
   }), items.map(function (item) {

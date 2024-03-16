@@ -17,9 +17,9 @@ switch ($_SERVER['REDIRECT_URL']) {
         break;
     }
 
-    // UPC lookup
+    // Code lookup
     case "/api/lookup": {
-        $stmt = $mysqli->prepare("SELECT `item_id`, `upc`, `name`, `life` FROM `items` WHERE upc=?");
+        $stmt = $mysqli->prepare("SELECT `item_id`, `code`, `name`, `life` FROM `items` WHERE `code`=?");
         $stmt->bind_param("s", $_GET['code']);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -27,7 +27,7 @@ switch ($_SERVER['REDIRECT_URL']) {
         $row = $result->fetch_assoc();
         if ($row) {
             $response = array(
-                upc => $_GET['code'],
+                code => $_GET['code'],
                 found => true,
                 item_id => $row['item_id'],
                 name => $row['name'],
@@ -36,7 +36,7 @@ switch ($_SERVER['REDIRECT_URL']) {
             );
         } else {
             $response = array(
-                upc => $_GET['code'],
+                code => $_GET['code'],
                 found => false,
             );
         }
@@ -44,11 +44,11 @@ switch ($_SERVER['REDIRECT_URL']) {
     }
 
     case "/api/contents": {
-        if ($_GET['upc']) {
-            $stmt = $mysqli->prepare("SELECT `content_id`, `upc`, `contents`.`item_id`, `name`, `container_id` as `container`, `added`, `expiry` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE `upc`=?");
-            $stmt->bind_param("s", $_GET['upc']);
+        if ($_GET['code']) {
+            $stmt = $mysqli->prepare("SELECT `content_id`, `code`, `contents`.`item_id`, `name`, `container_id` as `container`, `added`, `expiry` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE `code`=?");
+            $stmt->bind_param("s", $_GET['code']);
         } else {
-            $stmt = $mysqli->prepare("SELECT `content_id`, `upc`, `contents`.`item_id`, `name`, `container_id` as `container`, `added`, `expiry` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`");
+            $stmt = $mysqli->prepare("SELECT `content_id`, `code`, `contents`.`item_id`, `name`, `container_id` as `container`, `added`, `expiry` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`");
         }
         // die($mysqli->error);
         $stmt->execute();
@@ -79,16 +79,16 @@ switch ($_SERVER['REDIRECT_URL']) {
     }
 
     case "/api/register": {
-        $stmt = $mysqli->prepare("INSERT INTO `items` (`upc`, `name`, `life`) VALUES (?, ?, 1)");
+        $stmt = $mysqli->prepare("INSERT INTO `items` (`code`, `name`, `life`) VALUES (?, ?, 1)");
         $stmt->bind_param("ss",
-            $_GET['upc'],
+            $_GET['code'],
             $_GET['name']
         );
         $stmt->execute();
 
         $id = $mysqli->insert_id;
         // Get the new record
-        $stmt = $mysqli->prepare("SELECT `item_id`, `upc`, `name`, `life` FROM `items` WHERE item_id=?");
+        $stmt = $mysqli->prepare("SELECT `item_id`, `code`, `name`, `life` FROM `items` WHERE item_id=?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();

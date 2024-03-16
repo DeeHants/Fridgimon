@@ -22,10 +22,10 @@ function Reader(_ref) {
       onError("Scan failed");
       return;
     }
-    var scan_upc = params['data'];
+    var scan_data = params['data'];
     var scan_source = params['source'];
     var scan_type = params['type'];
-    onScan(scan_upc, scan_source, scan_type);
+    onScan(scan_data, scan_source, scan_type);
   }
 
   // No visible component

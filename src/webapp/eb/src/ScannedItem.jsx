@@ -5,7 +5,7 @@ function ScannedItem({ item, onClear, onRefresh }) {
     function registerItem() {
         api_register(
             {
-                upc: item.upc,
+                code: item.code,
                 name: itemName,
             },
             function (data, _error) {

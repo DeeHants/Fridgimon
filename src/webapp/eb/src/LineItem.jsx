@@ -19,7 +19,7 @@ function LineItem({ item, marker, children, actions }) {
             )}
 
             <div className="itemName">{item.name || "Unknown"}</div>
-            <div className="itemUpc">{item.upc}</div>
+            <div className="itemCode">{item.code}</div>
             {item.expiry && (<div className="itemExpiry">{item.expiry}</div>)}
 
             {children}

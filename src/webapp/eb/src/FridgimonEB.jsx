@@ -7,22 +7,22 @@ function FridgimonEB() {
     const [items, setItems] = React.useState([]);
 
     // Handle scan events
-    function lookupItem(scan_upc, _scan_source, _scan_type) {
+    function lookupItem(scan_data, _scan_source, _scan_type) {
         api_lookup(
             {
-                code: scan_upc,
+                code: scan_data,
             },
             function (data, _error) {
                 if (!data) {
-                    setError("Unable to lookup " + scan_upc);
+                    setError("Unable to lookup " + scan_data);
                     data = {
-                        upc: scan_upc,
+                        code: scan_data,
                     }
                 }
 
                 // Update the scan results
                 setScannerResult(data);
-                refreshItems({ upc: data.upc });
+                refreshItems({ code: data.code });
             }
         );
     }
@@ -67,7 +67,7 @@ function FridgimonEB() {
 
             {scannerResult &&
                 <ScannedItem
-                    key={scannerResult.upc}
+                    key={scannerResult.code}
                     item={scannerResult}
                     onClear={() => {
                         setScannerResult();
@@ -77,7 +77,7 @@ function FridgimonEB() {
                         if (new_item) {
                             setScannerResult(new_item);
                         }
-                        refreshItems({ upc: scannerResult.upc })
+                        refreshItems({ code: scannerResult.code })
                     }}
                 />}
 

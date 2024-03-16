@@ -71,7 +71,7 @@ CREATE TABLE `contents` (
 
 CREATE TABLE `items` (
   `item_id` int(11) NOT NULL,
-  `upc` varchar(50) DEFAULT NULL,
+  `code` varchar(50) DEFAULT NULL,
   `name` text NOT NULL,
   `life` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -121,7 +121,7 @@ ALTER TABLE `contents`
 --
 ALTER TABLE `items`
   ADD PRIMARY KEY (`item_id`),
-  ADD UNIQUE KEY `upc` (`upc`);
+  ADD UNIQUE KEY `code` (`code`);
 
 --
 -- Indexes for table `users`

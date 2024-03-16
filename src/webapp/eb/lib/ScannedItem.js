@@ -17,7 +17,7 @@ function ScannedItem(_ref) {
     setItemName = _React$useState2[1];
   function registerItem() {
     api_register({
-      upc: item.upc,
+      code: item.code,
       name: itemName
     }, function (data, _error) {
       if (!data) {
