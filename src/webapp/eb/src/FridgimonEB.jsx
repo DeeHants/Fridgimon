@@ -7,10 +7,13 @@ function FridgimonEB() {
     const [items, setItems] = React.useState([]);
 
     // Handle scan events
-    function lookupItem(scan_data, _scan_source, _scan_type) {
+    function lookupItem(scan_data, scan_source, _scan_type) {
+        var code_type_parts = scan_source.split(":", 2);
+        var code_type = code_type_parts[1];
         api_lookup(
             {
                 code: scan_data,
+                type: code_type,
             },
             function (data, _error) {
                 if (!data) {

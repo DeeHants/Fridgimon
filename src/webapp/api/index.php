@@ -19,8 +19,11 @@ switch ($_SERVER['REDIRECT_URL']) {
 
     // Code lookup
     case "/api/lookup": {
-        $stmt = $mysqli->prepare("SELECT `item_id`, `code`, `name`, `life` FROM `items` WHERE `code`=?");
-        $stmt->bind_param("s", $_GET['code']);
+        $stmt = $mysqli->prepare("SELECT `item_id`, `code`, `name`, `life` FROM `items` WHERE `code`=? and (`code_type`=? or `code_type` is null or ? is null)");
+        $stmt->bind_param("sss",
+            $_GET['code'],
+            $_GET['type'], $_GET['type']
+        );
         $stmt->execute();
         $result = $stmt->get_result();
 
