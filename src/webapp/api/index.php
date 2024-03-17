@@ -114,9 +114,10 @@ function api_item($method, $params, $data) {
     global $mysqli;
 
     if ($method == 'POST') {
-        $stmt = $mysqli->prepare("INSERT INTO `items` (`code`, `name`, `life`) VALUES (?, ?, ?)");
-        $stmt->bind_param("ssi",
+        $stmt = $mysqli->prepare("INSERT INTO `items` (`code`, `code_type`, `name`, `life`) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("sssi",
             $data['code'],
+            $data['code_type'],
             $data['name'],
             $data['life']
         );
@@ -143,12 +144,12 @@ function api_item($method, $params, $data) {
 
     // Lookup the resulting item
     if ($item_id != null) {
-        $stmt = $mysqli->prepare("SELECT `item_id`, `code`, `name`, `life` FROM `items` WHERE `item_id`=?");
+        $stmt = $mysqli->prepare("SELECT `item_id`, `code`, `code_type`, `name`, `life` FROM `items` WHERE `item_id`=?");
         $stmt->bind_param("i",
             $item_id
         );
     } elseif ($item_code != null) {
-        $stmt = $mysqli->prepare("SELECT `item_id`, `code`, `name`, `life` FROM `items` WHERE `code`=? and (`code_type`=? or `code_type` is null or ? is null)");
+        $stmt = $mysqli->prepare("SELECT `item_id`, `code`, `code_type`, `name`, `life` FROM `items` WHERE `code`=? and (`code_type`=? or `code_type` is null or ? is null)");
         $stmt->bind_param("sss",
             $item_code,
             $item_code_type, $item_code_type
@@ -166,6 +167,7 @@ function api_item($method, $params, $data) {
             'found' => true,
             'item_id' => $row['item_id'],
             'code' => $row['code'],
+            'code_type' => $row['code_type'],
             'name' => $row['name'],
             'life' => $row['life'],
             'expires' => $row['life'] != "",
@@ -175,6 +177,7 @@ function api_item($method, $params, $data) {
             'found' => false,
             'item_id' => $item_id,
             'code' => $item_code,
+            'code_type' => $item_code_type,
         );
     }
 

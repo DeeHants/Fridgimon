@@ -21,6 +21,7 @@ function UnknownItem(_ref) {
   function registerItem() {
     api_register_new_item({
       code: item.code,
+      code_type: item.code_type,
       name: itemName,
       life: itemLife
     }, function (data, _error) {

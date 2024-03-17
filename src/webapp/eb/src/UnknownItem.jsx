@@ -7,6 +7,7 @@ function UnknownItem({ item, onRefresh }) {
         api_register_new_item(
             {
                 code: item.code,
+                code_type: item.code_type,
                 name: itemName,
                 life: itemLife,
             },
