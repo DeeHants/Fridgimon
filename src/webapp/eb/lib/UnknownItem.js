@@ -14,10 +14,15 @@ function UnknownItem(_ref) {
     _React$useState2 = _slicedToArray(_React$useState, 2),
     itemName = _React$useState2[0],
     setItemName = _React$useState2[1];
+  var _React$useState3 = React.useState(null),
+    _React$useState4 = _slicedToArray(_React$useState3, 2),
+    itemLife = _React$useState4[0],
+    setItemLife = _React$useState4[1];
   function registerItem() {
     api_register_new_item({
       code: item.code,
-      name: itemName
+      name: itemName,
+      life: itemLife
     }, function (data, _error) {
       if (!data) {
         setError("Unable to register item");
@@ -30,7 +35,8 @@ function UnknownItem(_ref) {
     marker: "lightgrey",
     actions: [{
       caption: "Register",
-      onClick: registerItem
+      onClick: registerItem,
+      disabled: itemName == '' || itemName == null
     }]
   }, /*#__PURE__*/React.createElement("div", {
     className: "itemNameEntry"
@@ -39,6 +45,21 @@ function UnknownItem(_ref) {
     value: itemName,
     onChange: function onChange(e) {
       return setItemName(e.target.value);
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "itemLifeEntry"
+  }, /*#__PURE__*/React.createElement("label", null, "Expires "), /*#__PURE__*/React.createElement("input", {
+    type: "checkbox",
+    checked: itemLife != null,
+    onChange: function onChange(e) {
+      return setItemLife(e.target.checked ? 14 : null);
+    }
+  }), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("label", null, "Life "), /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    value: itemLife || '',
+    disabled: itemLife == null,
+    onChange: function onChange(e) {
+      return setItemLife(e.target.value);
     }
   })));
 }

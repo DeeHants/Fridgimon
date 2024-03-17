@@ -114,7 +114,6 @@ function api_item($method, $params, $data) {
     global $mysqli;
 
     if ($method == 'POST') {
-        $data['life'] = 1; // Default value for now
         $stmt = $mysqli->prepare("INSERT INTO `items` (`code`, `name`, `life`) VALUES (?, ?, ?)");
         $stmt->bind_param("ssi",
             $data['code'],
