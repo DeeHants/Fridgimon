@@ -1,4 +1,36 @@
 <?php
+$apis = array(
+    array(
+        'pattern' => 'hello',
+        'methods' => array("GET"),
+        'handler' => "api_hello",
+    ),
+
+    // Item handling
+    array(
+        'pattern' => 'item\/([0-9]+)(?:\/([a-zA-Z0-9]+))?',
+        'methods' => array("GET"),
+        'handler' => "api_item",
+    ),
+    array(
+        'pattern' => 'item',
+        'methods' => array("POST"),
+        'handler' => "api_item",
+    ),
+
+    // Contents handling
+    array(
+        'pattern' => 'contents(?:\/([0-9]+)(?:\/([a-zA-Z0-9]+))?)?',
+        'methods' => array("GET"),
+        'handler' => "api_contents",
+    ),
+    array(
+        'pattern' => "content",
+        'methods' => array("POST"),
+        'handler' => "api_contents",
+    ),
+);
+
 // Default response
 $status = 200;
 $response = array();
@@ -8,104 +40,48 @@ $error = "";
 require '../db.inc.php';
 $mysqli = new mysqli($mysqli_hostname, $mysqli_username, $mysqli_password, $mysqli_database, $mysqli_port);
 
-switch ($_SERVER['REDIRECT_URL']) {
-    // Hello world, test API
-    case "/api/hello": {
-        $response = array(
-            'hello' => "Hello " . $_SERVER['REMOTE_ADDR'],
-        );
+// Determine what's being requested
+$method = $_SERVER['REQUEST_METHOD'];
+$path = $_SERVER['PATH_INFO'];
+
+// Check for the API
+$api_found = false;
+foreach ($apis as $api) {
+    $matches = array();
+    $pattern = '/^\/' . $api['pattern'] . "$/";
+    if (preg_match($pattern, $path, $matches) !== 1) {
+        continue;
+    }
+    $api_found = true;
+
+    // Supported methods
+    if (array_search($method, $api['methods']) === false) {
+        $status = 405;
+        $error = "This API doesn't accept $method calls";
         break;
     }
 
-    // Code lookup
-    case "/api/lookup": {
-        $stmt = $mysqli->prepare("SELECT `item_id`, `code`, `name`, `life` FROM `items` WHERE `code`=? and (`code_type`=? or `code_type` is null or ? is null)");
-        $stmt->bind_param("sss",
-            $_GET['code'],
-            $_GET['type'], $_GET['type']
-        );
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        $row = $result->fetch_assoc();
-        if ($row) {
-            $response = array(
-                'code' => $_GET['code'],
-                'found' => true,
-                'item_id' => $row['item_id'],
-                'name' => $row['name'],
-                'expires' => $row['life'] != "",
-                'life' => $row['life'],
-            );
-        } else {
-            $response = array(
-                'code' => $_GET['code'],
-                'found' => false,
-            );
-        }
-        break;
+    // Any data?
+    if ($method == 'POST' || $method== 'PUT' || $method == 'DELETE') {
+        $raw_data = file_get_contents("php://input");
+        $data = json_decode($raw_data, true);
+    } else {
+        $data = null;
     }
 
-    case "/api/contents": {
-        if ($_GET['code']) {
-            $stmt = $mysqli->prepare("SELECT `content_id`, `code`, `contents`.`item_id`, `name`, `container_id` as `container`, `added`, `expiry` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE `code`=?");
-            $stmt->bind_param("s", $_GET['code']);
-        } else {
-            $stmt = $mysqli->prepare("SELECT `content_id`, `code`, `contents`.`item_id`, `name`, `container_id` as `container`, `added`, `expiry` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`");
-        }
-        // die($mysqli->error);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    // Call the handler
+    $handler = $api['handler'];
+    $result = $handler($method, $matches, $data);
 
-        while($row = $result->fetch_assoc()) {
-            if ($row['expiry'] != '') {
-                $expiry_date = new DateTime($row['expiry']);
-                $current_date = new DateTime();
-                $interval = $current_date->diff($expiry_date, false);
-                $days_left = $interval->d * ($interval->invert ? -1 : 1);
-                $row['days_left'] = $days_left;
-                $row['expired'] = $days_left < 0;
-            }
-            $response[] = $row;
-        }
-        break;
-    }
-
-    case "/api/store": {
-        $stmt = $mysqli->prepare("INSERT INTO `contents` (`item_id`, `container_id`, `expiry`) VALUES (?, 1, ?)");
-        $stmt->bind_param("is",
-            $_GET['item_id'],
-            $_GET['expiry']
-        );
-        $stmt->execute();
-        break;
-    }
-
-    case "/api/register": {
-        $stmt = $mysqli->prepare("INSERT INTO `items` (`code`, `name`, `life`) VALUES (?, ?, 1)");
-        $stmt->bind_param("ss",
-            $_GET['code'],
-            $_GET['name']
-        );
-        $stmt->execute();
-
-        $id = $mysqli->insert_id;
-        // Get the new record
-        $stmt = $mysqli->prepare("SELECT `item_id`, `code`, `name`, `life` FROM `items` WHERE item_id=?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        $response =  $result->fetch_assoc();
-        $response['found'] = true;
-        $response['expires'] = $response['life'] != "";
-        break;
-    }
-
-    default: {
-        $status = "400";
-        $error = "API not found";
-    }
+    // Set the results
+    if (array_key_exists('response', $result)) { $response = $result['response']; }
+    if (array_key_exists('status', $result)) { $status = $result['status']; }
+    if (array_key_exists('error', $result)) { $error = $result['error']; }
+    break;
+}
+if (!$api_found) {
+    $status = 400;
+    $error = "Unknown API";
 }
 
 // If there was an error, create the response
@@ -119,4 +95,163 @@ if ($error) {
 http_response_code($status);
 header("Content-Type: application/json");
 print json_encode($response, JSON_PRETTY_PRINT);
+
+function api_hello($method, $params, $data) {
+    $response = array(
+        'hello' => "Hello " . $_SERVER['REMOTE_ADDR'],
+    );
+    return array(
+        'response' => $response,
+    );
+}
+
+function api_item($method, $params, $data) {
+    global $mysqli;
+
+    if ($method == 'POST') {
+        $data['life'] = 1; // Default value for now
+        $stmt = $mysqli->prepare("INSERT INTO `items` (`code`, `name`, `life`) VALUES (?, ?, ?)");
+        $stmt->bind_param("ssi",
+            $data['code'],
+            $data['name'],
+            $data['life']
+        );
+        $stmt->execute();
+        if ($mysqli->error) { return api_error($mysqli->error); }
+
+        // Get the last ID for the lookup
+        $item_id = $mysqli->insert_id;
+
+    } elseif ($method == 'GET') {
+        // Figure out what we're getting
+        if (($params[1] ?? 0) > 9999999 || ($params[2] ?? null)) {
+            // 8 digits or has a type is most likely a EAN/UPC
+            $item_id = null;
+            $item_code = $params[1];
+            $item_code_type = $params[2] ?? null;
+        } else {
+            // otherwise an ID
+            $item_id = $params[1];
+            $item_code = null;
+            $item_code_type = null;
+        }
+    }
+
+    // Lookup the resulting item
+    if ($item_id != null) {
+        $stmt = $mysqli->prepare("SELECT `item_id`, `code`, `name`, `life` FROM `items` WHERE `item_id`=?");
+        $stmt->bind_param("i",
+            $item_id
+        );
+    } elseif ($item_code != null) {
+        $stmt = $mysqli->prepare("SELECT `item_id`, `code`, `name`, `life` FROM `items` WHERE `code`=? and (`code_type`=? or `code_type` is null or ? is null)");
+        $stmt->bind_param("sss",
+            $item_code,
+            $item_code_type, $item_code_type
+        );
+    } else {
+        return api_error("Nothing to lookup");
+    }
+
+    $stmt->execute();
+    if ($mysqli->error) { return api_error($mysqli->error); }
+    $result = $stmt->get_result();
+
+    if ($row = $result->fetch_assoc()) {
+        $response = array(
+            'found' => true,
+            'item_id' => $row['item_id'],
+            'code' => $row['code'],
+            'name' => $row['name'],
+            'life' => $row['life'],
+            'expires' => $row['life'] != "",
+        );
+    } else {
+        $response = array(
+            'found' => false,
+            'item_id' => $item_id,
+            'code' => $item_code,
+        );
+    }
+
+    return array(
+        'response' => $response,
+    );
+}
+
+function api_contents($method, $params, $data) {
+    global $mysqli;
+
+    if ($method == 'POST') {
+        $stmt = $mysqli->prepare("INSERT INTO `contents` (`item_id`, `container_id`, `expiry`) VALUES (?, 1, ?)");
+        $stmt->bind_param("is",
+            $data['item_id'],
+            $data['expiry']
+        );
+        $stmt->execute();
+        if ($mysqli->error) { return api_error($mysqli->error); }
+
+        // Get the last ID for the lookup
+        $item_id = $mysqli->insert_id;
+
+    } elseif ($method == 'GET') {
+        // Figure out what we're getting
+        if (($params[1] ?? 0) > 9999999 || ($params[2] ?? null)) {
+            // 8 digits or has a type is most likely a EAN/UPC
+            $item_id = null;
+            $item_code = $params[1];
+            $item_code_type = $params[2] ?? null;
+        } elseif ($params[1] ?? null) {
+            // otherwise an ID
+            $item_id = $params[1];
+            $item_code = null;
+            $item_code_type = null;
+        } else {
+            $item_id = null;
+            $item_code = null;
+            $item_code_type = null;
+        }
+    }
+
+    // Lookup the contents
+    if ($item_id != null) {
+        $stmt = $mysqli->prepare("SELECT `content_id`, `code`, `contents`.`item_id`, `name`, `container_id` as `container`, `added`, `expiry` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE `items`.`item_id`=?");
+        $stmt->bind_param("i", $item_id);
+    } elseif ($item_code != null) {
+        $stmt = $mysqli->prepare("SELECT `content_id`, `code`, `contents`.`item_id`, `name`, `container_id` as `container`, `added`, `expiry` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE `code`=?");
+        $stmt->bind_param("s", $item_code);
+    } else {
+        $stmt = $mysqli->prepare("SELECT `content_id`, `code`, `contents`.`item_id`, `name`, `container_id` as `container`, `added`, `expiry` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`");
+    }
+
+    $stmt->execute();
+    if ($mysqli->error) { return api_error($mysqli->error); }
+    $result = $stmt->get_result();
+
+    $response = array();
+    while($row = $result->fetch_assoc()) {
+        if ($row['expiry'] != '') {
+            $expiry_date = new DateTime($row['expiry']);
+            $current_date = new DateTime();
+            $interval = $current_date->diff($expiry_date, false);
+            $days_left = $interval->d * ($interval->invert ? -1 : 1);
+            $row['days_left'] = $days_left;
+            $row['expired'] = $days_left < 0;
+        }
+        $response[] = $row;
+    }
+
+    return array(
+        'response' => $response,
+    );
+}
+
+function api_error($message, $status = 500) {
+    error_log("Returning $message");
+    return array(
+        'error' => $message,
+        'status' => $status,
+    );
+}
+
 ?>

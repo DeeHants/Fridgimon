@@ -29,7 +29,7 @@ function FridgimonEB() {
   function lookupItem(scan_data, scan_source, _scan_type) {
     var code_type_parts = scan_source.split(":", 2);
     var code_type = code_type_parts[1];
-    api_lookup({
+    api_lookup_item({
       code: scan_data,
       type: code_type
     }, function (data, _error) {
@@ -54,7 +54,7 @@ function FridgimonEB() {
   }, []);
   function refreshItems(filter) {
     setBusy(true);
-    api_contents(filter, function (data, _error) {
+    api_get_contents(filter, function (data, _error) {
       if (!data) {
         setError("Unable to get contents");
         data = [];

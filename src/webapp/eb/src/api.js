@@ -1,53 +1,48 @@
-function api_lookup(query, onComplete) {
+function api_lookup_item(query, onComplete) {
+    var call = "item/" + encodeURIComponent(query['code']);
+    if (query['type']) {
+        call += "/" + encodeURIComponent(query['type']);
+    }
     api_call(
-        "lookup",
-        query,
+        'GET', call, undefined,
         onComplete
     );
 }
 
-function api_contents(filter, onComplete) {
+function api_get_contents(filter, onComplete) {
+    var call = "contents";
+    if (filter && filter['code']) {
+        call += "/" + encodeURIComponent(filter['code']);
+    }
     api_call(
-        "contents",
-        filter,
+        'GET', call, undefined,
         onComplete
     );
 }
 
-function api_register(item, onComplete) {
+function api_register_new_item(item, onComplete) {
     api_call(
-        "register",
-        item,
+        'POST', "item", item,
         onComplete
     )
 }
 
-function api_store(item_id, expiry_date, onComplete) {
-    var parameters = {
-        item_id: item_id,
-    };
-    if (expiry_date) { parameters['expiry'] = expiry_date; }
+function api_store_new_content(item, onComplete) {
     api_call(
-        "store",
-        parameters,
+        'POST', "content", item,
         onComplete
     );
 }
 
-function api_call(method, parameters, onComplete) {
-    // Build the parameter string
-    var parameter_string = "";
-    for (var key in parameters) {
-        parameter_string += (parameter_string == "" ? "" : "&")
-        parameter_string += key + "=" + encodeURIComponent(parameters[key])
-    }
-    parameter_string = (parameter_string != "" ? "?" : "") + parameter_string
-    // and full URL
-    var url = "/api/" + method + parameter_string;
+function api_call(method, path, data, onComplete) {
+    // Build the full URL
+    var url = "/api/" + path;
 
     // and get!
     EB.jQuery.ajax({
+        type: method,
         url: url,
+        data: data == undefined ? undefined : JSON.stringify(data),
         async: true,
         dataType: 'json',
         success: function (data, _status, _jqXHR) {

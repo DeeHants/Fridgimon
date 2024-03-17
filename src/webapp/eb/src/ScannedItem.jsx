@@ -3,7 +3,7 @@ function ScannedItem({ item, onClear, onRefresh }) {
     const [itemName, setItemName] = React.useState("");
 
     function registerItem() {
-        api_register(
+        api_register_new_item(
             {
                 code: item.code,
                 name: itemName,
@@ -29,9 +29,13 @@ function ScannedItem({ item, onClear, onRefresh }) {
     const [expiryValue, setExpiryValue] = React.useState(expiry_date_string);
 
     function storeItem() {
-        api_store(
-            item.item_id,
-            item.expires ? expiryValue : undefined,
+        var content = {
+            item_id: item.item_id,
+        };
+        if (item.expires) { content['expiry'] = expiryValue; }
+
+        api_store_new_content(
+            content,
             function (data, _error) {
                 if (!data) {
                     setError("Unable to store item contents");

@@ -1,3 +1,4 @@
 # Map everything to index.php
 RewriteEngine on
-RewriteRule ^ index.php [L,QSA]
+RewriteRule ^index.php - [END]
+RewriteRule ^(.*)$ index.php/$1 [L,QSA]
