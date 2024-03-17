@@ -1,6 +1,12 @@
 function Reader({ onError, onScan }) {
     // Enable and disable the scanner as this component is loaded
     React.useEffect(() => {
+        // Check we have RHO
+        if (typeof window['__rhoNativeApi'] == 'undefined') {
+            console.warn("No RHO/barcode scanner");
+            return;
+        }
+
         // Initialise the barcode scanner
         EB.Barcode.enable({
             allDecoders: true,

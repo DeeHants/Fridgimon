@@ -22,7 +22,7 @@ Fridgimon is a webapp in React, with a PHP backend that talks to the database. I
     </Location>
     ```
     (Note, you cannot add this to `.htaccess`)
-5.  Open the browser and navigate to `http://yourhost/eb/`, and you should have a page with JS errors (as unable to access the barcode scanner).
+5.  Open the browser and navigate to `http://yourhost/eb/`, and you should have a page with the Fridgimon title.
 
 ### Enterprise Browser
 
