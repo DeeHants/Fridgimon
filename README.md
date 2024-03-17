@@ -11,7 +11,7 @@ Fridgimon is a webapp in React, with a PHP backend that talks to the database. I
 
 ### Web application
 
-1.  Create the database schema from `fridgimon.sql`.
+1.  Create the database schema from `src/fridgimon.sql`.
 2.  Copy `src/webapp/db.sample.inc.php` to `src/webapp/db.inc.php` and populate with your MySQL connection details.
 3.  Setup an Apache vhost with the document root of `src/webapp`.
 4.  Allow the `PUT` and `DELETE` methods for the `src/webapp/api` directory, either in the global apache config, or the vhost entry, e.g.
