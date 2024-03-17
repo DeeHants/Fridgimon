@@ -17,8 +17,12 @@ function api_get_contents(filter, onComplete) {
 function api_register_new_item(item, onComplete) {
   api_call('POST', "item", item, onComplete);
 }
-function api_store_new_content(item, onComplete) {
-  api_call('POST', "content", item, onComplete);
+function api_store_new_content(content, onComplete) {
+  api_call('POST', "content", content, onComplete);
+}
+function api_remove_content(content, onComplete) {
+  var call = "content/" + content['content_id'];
+  api_call('DELETE', call, undefined, onComplete);
 }
 function api_call(method, path, data, onComplete) {
   // Build the full URL

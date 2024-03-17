@@ -29,6 +29,11 @@ $apis = array(
         'methods' => array("POST"),
         'handler' => "api_contents",
     ),
+    array(
+        'pattern' => "content\/([0-9]+)",
+        'methods' => array("DELETE"),
+        'handler' => "api_contents",
+    ),
 );
 
 // Default response
@@ -62,7 +67,7 @@ foreach ($apis as $api) {
     }
 
     // Any data?
-    if ($method == 'POST' || $method== 'PUT' || $method == 'DELETE') {
+    if ($method == 'POST' || $method== 'PUT') {
         $raw_data = file_get_contents("php://input");
         $data = json_decode($raw_data, true);
     } else {
@@ -193,6 +198,27 @@ function api_contents($method, $params, $data) {
 
         // Get the last ID for the lookup
         $item_id = $mysqli->insert_id;
+
+    } elseif ($method == 'DELETE') {
+        // Get the existing item ID
+        $stmt = $mysqli->prepare("SELECT `content_id`, `item_id` FROM `contents` WHERE `content_id` = ?");
+        $stmt->bind_param("i",
+            $params[1]
+        );
+        $stmt->execute();
+        if ($mysqli->error) { return api_error($mysqli->error); }
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $item_id = $row['item_id'];
+        }
+
+        // Delete the item
+        $stmt = $mysqli->prepare("DELETE FROM `contents` WHERE `content_id` = ?");
+        $stmt->bind_param("i",
+            $params[1]
+        );
+        $stmt->execute();
+        if ($mysqli->error) { return api_error($mysqli->error); }
 
     } elseif ($method == 'GET') {
         // Figure out what we're getting

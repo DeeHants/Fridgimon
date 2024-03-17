@@ -51,6 +51,24 @@ function FridgimonEB() {
         );
     }
 
+    function deleteContent(content_id) {
+        setBusy(true);
+
+        api_remove_content(
+            {
+                content_id: content_id,
+            },
+            function (data, _error) {
+                if (!data) {
+                    setError("Unable to remove contents");
+                    data = []
+                }
+                setItems(data);
+                setBusy(false);
+            }
+        );
+    }
+
     return (
         <>
             <Busy isBusy={isBusy} />
@@ -91,7 +109,7 @@ function FridgimonEB() {
                     actions={[
                         {
                             caption: "Remove",
-                            disabled: true,
+                            onClick: () => { deleteContent(item.content_id) }
                         },
                     ]}
                 />
