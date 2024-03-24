@@ -258,11 +258,12 @@ function api_contents($method, $params, $data) {
 
     $response = array();
     while($row = $result->fetch_assoc()) {
+        $current_date = new DateTime(date('Y-m-d'));
+        // Check the expiry
         if ($row['expiry'] != '') {
             $expiry_date = new DateTime($row['expiry']);
-            $current_date = new DateTime();
-            $interval = $current_date->diff($expiry_date, false);
-            $days_left = $interval->d * ($interval->invert ? -1 : 1);
+            $interval = $current_date->diff($expiry_date);
+            $days_left = $interval->days * ($interval->invert ? -1 : 1);
             $row['days_left'] = $days_left;
             $row['expired'] = $days_left < 0;
         }
