@@ -267,6 +267,13 @@ function api_contents($method, $params, $data) {
             $row['days_left'] = $days_left;
             $row['expired'] = $days_left < 0;
         }
+
+        // Determine age
+        $added_date = new DateTime($row['added']);
+        $interval = $added_date->diff($current_date);
+        $days_stored = $interval->days * ($interval->invert ? -1 : 1);
+        $row['stored_for'] = $days_stored;
+
         $response[] = $row;
     }
 

@@ -6,8 +6,9 @@ function LineItem(_ref) {
     children = _ref.children,
     actions = _ref.actions;
   // Create the marker colour style
+  // Items are green, orange and red as it approaches and passes expiry, or blue if over 28 days old
   if (!marker) {
-    marker = !item.expiry ? undefined : item.expired ? "red" : item.days_left < 2 ? "orange" : "green";
+    marker = item.expiry ? item.expired ? "red" : item.days_left < 2 ? "orange" : item.stored_for > 28 ? "blue" : "green" : item.stored_for > 28 ? "blue" : undefined;
   }
   var item_style = marker ? {
     borderLeftColor: marker
