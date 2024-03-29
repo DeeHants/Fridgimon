@@ -168,7 +168,7 @@ function api_item($method, $params, $data) {
             $row,
             array(
                 'found' => true,
-                'expires' => $row['life'] != "",
+                'expires' => $row['life'] !== null,
             )
         );
     } else {

@@ -4,7 +4,7 @@ function NewItem({ item, onRefresh }) {
     var current_date_string = current_date.toISOString().substring(0, 10)
     var expiry_date = undefined;
     var expiry_date_string = undefined;
-    if (item.life) {
+    if (item.expires) {
         expiry_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() + item.life)
         expiry_date_string = expiry_date.toISOString().substring(0, 10)
     }
