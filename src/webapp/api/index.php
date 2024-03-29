@@ -112,15 +112,16 @@ function api_hello($method, $params, $data) {
 
 function api_item($method, $params, $data) {
     global $mysqli;
+    $fields = array(
+        "code" => "s",
+        "code_type" => "s",
+        "name" => "s",
+        "life" => "i",
+    );
 
     if ($method == 'POST') {
-        $stmt = $mysqli->prepare("INSERT INTO `items` (`code`, `code_type`, `name`, `life`) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("sssi",
-            $data['code'],
-            $data['code_type'],
-            $data['name'],
-            $data['life']
-        );
+        $stmt = $mysqli->prepare("INSERT INTO `items` (" . field_names($fields) . ") VALUES (" . field_placeholders($fields) . ")");
+        $stmt->bind_param(field_bindtypes($fields), ...field_values($fields, $data));
         $stmt->execute();
         if ($mysqli->error) { return api_error($mysqli->error); }
 
@@ -144,12 +145,12 @@ function api_item($method, $params, $data) {
 
     // Lookup the resulting item
     if ($item_id != null) {
-        $stmt = $mysqli->prepare("SELECT `item_id`, `code`, `code_type`, `name`, `life` FROM `items` WHERE `item_id`=?");
+        $stmt = $mysqli->prepare("SELECT `item_id`, " . field_names($fields) . " FROM `items` WHERE `item_id`=?");
         $stmt->bind_param("i",
             $item_id
         );
     } elseif ($item_code != null) {
-        $stmt = $mysqli->prepare("SELECT `item_id`, `code`, `code_type`, `name`, `life` FROM `items` WHERE `code`=? and (`code_type`=? or `code_type` is null or ? is null)");
+        $stmt = $mysqli->prepare("SELECT `item_id`, " . field_names($fields) . " FROM `items` WHERE `code`=? and (`code_type`=? or `code_type` is null or ? is null)");
         $stmt->bind_param("sss",
             $item_code,
             $item_code_type, $item_code_type
@@ -163,14 +164,12 @@ function api_item($method, $params, $data) {
     $result = $stmt->get_result();
 
     if ($row = $result->fetch_assoc()) {
-        $response = array(
-            'found' => true,
-            'item_id' => $row['item_id'],
-            'code' => $row['code'],
-            'code_type' => $row['code_type'],
-            'name' => $row['name'],
-            'life' => $row['life'],
-            'expires' => $row['life'] != "",
+        $response = array_merge(
+            $row,
+            array(
+                'found' => true,
+                'expires' => $row['life'] != "",
+            )
         );
     } else {
         $response = array(
@@ -188,13 +187,20 @@ function api_item($method, $params, $data) {
 
 function api_contents($method, $params, $data) {
     global $mysqli;
+    $fields = array(
+        "item_id" => "i",
+        "added" => "s",
+        "expiry" => "s",
+    );
+    $item_fields = array(
+        "code" => "s",
+        "name" => "s",
+    );
 
     if ($method == 'POST') {
-        $stmt = $mysqli->prepare("INSERT INTO `contents` (`item_id`, `container_id`, `expiry`) VALUES (?, 1, ?)");
-        $stmt->bind_param("is",
-            $data['item_id'],
-            $data['expiry']
-        );
+        if (!$data['added']) { $data['added'] = date('Y-m-d'); }
+        $stmt = $mysqli->prepare("INSERT INTO `contents` (" . field_names($fields) . ", `container_id`) VALUES (" . field_placeholders($fields) . ", 1)");
+        $stmt->bind_param(field_bindtypes($fields), ...field_values($fields, $data));
         $stmt->execute();
         if ($mysqli->error) { return api_error($mysqli->error); }
 
@@ -243,13 +249,13 @@ function api_contents($method, $params, $data) {
 
     // Lookup the contents
     if ($item_id != null) {
-        $stmt = $mysqli->prepare("SELECT `content_id`, `code`, `contents`.`item_id`, `name`, `container_id` as `container`, `added`, `expiry` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE `items`.`item_id`=?");
+        $stmt = $mysqli->prepare("SELECT `content_id`, " . field_names($fields, "contents") . ", " . field_names($item_fields, "items") . ", `container_id` as `container` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE `items`.`item_id`=?");
         $stmt->bind_param("i", $item_id);
     } elseif ($item_code != null) {
-        $stmt = $mysqli->prepare("SELECT `content_id`, `code`, `contents`.`item_id`, `name`, `container_id` as `container`, `added`, `expiry` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE `code`=?");
+        $stmt = $mysqli->prepare("SELECT `content_id`, " . field_names($fields, "contents") . ", " . field_names($item_fields, "items") . ", `container_id` as `container` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE `code`=?");
         $stmt->bind_param("s", $item_code);
     } else {
-        $stmt = $mysqli->prepare("SELECT `content_id`, `code`, `contents`.`item_id`, `name`, `container_id` as `container`, `added`, `expiry` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`");
+        $stmt = $mysqli->prepare("SELECT `content_id`, " . field_names($fields, "contents") . ", " . field_names($item_fields, "items") . ", `container_id` as `container` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`");
     }
 
     $stmt->execute();
@@ -288,6 +294,61 @@ function api_error($message, $status = 500) {
         'error' => $message,
         'status' => $status,
     );
+}
+
+/**
+ * Returns a list of quoted field names with an optional prefix, suitable for use in select or insert queries.
+ *
+ * @param  array $fields Field array to use
+ * @param  string $prefix Table prefix to add to each field name
+ * @return string
+ */
+function field_names($fields, $prefix = "") {
+    $names = array_keys($fields);
+    $names = array_map(function ($name) { return "`$name`"; }, $names);
+    if ($prefix != "") {
+        $names = array_map(function ($name) use ($prefix) { return "`$prefix`.$name"; }, $names);
+    }
+    return implode(", ", $names);
+}
+
+/**
+ * Returns a list of placeholders for the field array, suitable for use in insert queries.
+ *
+ * @param  array $fields Field array to use
+ * @return string
+ */
+function field_placeholders($fields) {
+    $names = array_keys($fields);
+    $names = array_map(function ($name) { return "?"; }, $names);
+    return implode(", ", $names);
+}
+
+/**
+ * Returns a string containing the bind types for the field array, suitable for use with bind_param
+ *
+ * @param  array $fields Field array to use
+ * @return string
+ */
+function field_bindtypes($fields) {
+    $types = array_values($fields);
+    return implode("", $types);
+}
+
+/**
+ * Returns an array of values for the field array, suitable for use with bind_param
+ *
+ * @param  array $fields Field array to use
+ * @param  array $data Array to extract the named values from
+ * @return array
+ */
+function field_values($fields, $data) {
+    $names = array_keys($fields);
+    $values = array();
+    foreach ($names as $name) {
+        $values[] = array_key_exists($name, $data) ? $data[$name] : null;
+    }
+    return $values;
 }
 
 ?>
