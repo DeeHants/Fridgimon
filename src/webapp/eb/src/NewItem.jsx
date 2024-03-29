@@ -18,9 +18,9 @@ function NewItem({ item, onRefresh }) {
 
         api_store_new_content(
             content,
-            function (data, _error) {
+            function (data, error) {
                 if (!data) {
-                    setError("Unable to store item contents");
+                    setError("Unable to store item contents, " + error);
                 }
                 onRefresh();
             }

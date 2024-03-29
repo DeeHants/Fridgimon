@@ -39,8 +39,20 @@ function api_call(method, path, data, onComplete) {
     success: function success(data, _status, _jqXHR) {
       onComplete(data, undefined);
     },
-    error: function error(_jqXHR, errorText, _errorThrown) {
-      onComplete(undefined, errorText);
+    error: function error(jqXHR, errorText, errorThrown) {
+      // If we get an error, see if we got JSON and parse out an error message
+      if (jqXHR && jqXHR.responseText) {
+        try {
+          var responseJson = JSON.parse(jqXHR.responseText);
+          if (responseJson.error) {
+            onComplete(undefined, responseJson.error);
+            return;
+          }
+        } catch (_ex) {
+          console.log(_ex);
+        }
+      }
+      onComplete(undefined, errorThrown || errorText);
     }
   });
 }

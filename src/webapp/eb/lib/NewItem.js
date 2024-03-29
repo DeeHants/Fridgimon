@@ -29,9 +29,9 @@ function NewItem(_ref) {
     if (item.expires) {
       content['expiry'] = expiryValue;
     }
-    api_store_new_content(content, function (data, _error) {
+    api_store_new_content(content, function (data, error) {
       if (!data) {
-        setError("Unable to store item contents");
+        setError("Unable to store item contents, " + error);
       }
       onRefresh();
     });

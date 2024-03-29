@@ -24,9 +24,9 @@ function UnknownItem(_ref) {
       code_type: item.code_type,
       name: itemName,
       life: itemLife
-    }, function (data, _error) {
+    }, function (data, error) {
       if (!data) {
-        setError("Unable to register item");
+        setError("Unable to register item, " + error);
       }
       onRefresh(data);
     });

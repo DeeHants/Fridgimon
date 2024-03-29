@@ -15,9 +15,9 @@ function FridgimonEB() {
                 code: scan_data,
                 type: code_type,
             },
-            function (data, _error) {
+            function (data, error) {
                 if (!data) {
-                    setError("Unable to lookup " + scan_data);
+                    setError("Unable to lookup " + scan_data + ", " + error);
                     data = {
                         code: scan_data,
                     }
@@ -45,9 +45,9 @@ function FridgimonEB() {
 
         api_get_contents(
             filter,
-            function (data, _error) {
+            function (data, error) {
                 if (!data) {
-                    setError("Unable to get contents");
+                    setError("Unable to get contents, " + error);
                     data = []
                 }
                 setItems(data);
@@ -63,9 +63,9 @@ function FridgimonEB() {
             {
                 content_id: content_id,
             },
-            function (data, _error) {
+            function (data, error) {
                 if (!data) {
-                    setError("Unable to remove contents");
+                    setError("Unable to remove contents, " + error);
                     data = []
                 }
                 refreshItems();
