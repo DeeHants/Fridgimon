@@ -25,7 +25,6 @@ function FridgimonEB() {
 
                 // Update the scan results
                 setScannerResult(data);
-                refreshItems({ code: data.code });
             }
         );
     }
@@ -33,10 +32,16 @@ function FridgimonEB() {
     // Contents
     React.useEffect(() => {
         refreshItems();
-    }, []);
+    }, [scannerResult]);
 
-    function refreshItems(filter) {
+    function refreshItems() {
         setBusy(true);
+
+        // Filter on the current scanned item
+        var filter = {};
+        if (scannerResult) {
+            filter.code = scannerResult.code;
+        }
 
         api_get_contents(
             filter,
@@ -63,7 +68,7 @@ function FridgimonEB() {
                     setError("Unable to remove contents");
                     data = []
                 }
-                setItems(data);
+                refreshItems();
                 setBusy(false);
             }
         );
@@ -92,13 +97,12 @@ function FridgimonEB() {
                     item={scannerResult}
                     onClear={() => {
                         setScannerResult();
-                        refreshItems();
                     }}
                     onRefresh={(new_item) => {
                         if (new_item) {
                             setScannerResult(new_item);
                         }
-                        refreshItems({ code: scannerResult.code })
+                        refreshItems();
                     }}
                 />}
 
