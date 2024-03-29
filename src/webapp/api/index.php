@@ -8,7 +8,7 @@ $apis = array(
 
     // Item handling
     array(
-        'pattern' => 'item\/([0-9]+)(?:\/([a-zA-Z0-9]+))?',
+        'pattern' => 'item\/(?:([a-zA-Z0-9]+):)?([0-9]+)',
         'methods' => array("GET"),
         'handler' => "api_item",
     ),
@@ -20,7 +20,7 @@ $apis = array(
 
     // Contents handling
     array(
-        'pattern' => 'contents(?:\/([0-9]+)(?:\/([a-zA-Z0-9]+))?)?',
+        'pattern' => 'contents(?:\/(?:([a-zA-Z0-9]+):)?([0-9]+))?',
         'methods' => array("GET"),
         'handler' => "api_contents",
     ),
@@ -130,14 +130,14 @@ function api_item($method, $params, $data) {
 
     } elseif ($method == 'GET') {
         // Figure out what we're getting
-        if (($params[1] ?? 0) > 9999999 || ($params[2] ?? null)) {
+        if (($params[2] ?? 0) > 9999999 || ($params[1] ?? null)) {
             // 8 digits or has a type is most likely a EAN/UPC
             $item_id = null;
-            $item_code = $params[1];
-            $item_code_type = $params[2] ?? null;
+            $item_code = $params[2];
+            $item_code_type = $params[1] ?? null;
         } else {
             // otherwise an ID
-            $item_id = $params[1];
+            $item_id = $params[2];
             $item_code = null;
             $item_code_type = null;
         }
@@ -230,14 +230,14 @@ function api_contents($method, $params, $data) {
 
     } elseif ($method == 'GET') {
         // Figure out what we're getting
-        if (($params[1] ?? 0) > 9999999 || ($params[2] ?? null)) {
+        if (($params[2] ?? 0) > 9999999 || ($params[1] ?? null)) {
             // 8 digits or has a type is most likely a EAN/UPC
             $item_id = null;
-            $item_code = $params[1];
-            $item_code_type = $params[2] ?? null;
-        } elseif ($params[1] ?? null) {
+            $item_code = $params[2];
+            $item_code_type = $params[1] ?? null;
+        } elseif ($params[2] ?? null) {
             // otherwise an ID
-            $item_id = $params[1];
+            $item_id = $params[2];
             $item_code = null;
             $item_code_type = null;
         } else {

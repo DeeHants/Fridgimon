@@ -1,10 +1,11 @@
 "use strict";
 
 function api_lookup_item(query, onComplete) {
-  var call = "item/" + encodeURIComponent(query['code']);
+  var code = query['code'];
   if (query['type']) {
-    call += "/" + encodeURIComponent(query['type']);
+    code = query['type'] + ":" + code;
   }
+  var call = "item/" + encodeURIComponent(code);
   api_call('GET', call, undefined, onComplete);
 }
 function api_get_contents(filter, onComplete) {
