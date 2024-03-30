@@ -71,7 +71,7 @@ function FridgimonEB() {
   }), /*#__PURE__*/React.createElement(Reader, {
     setError: setError,
     onScan: lookupItem
-  }), /*#__PURE__*/React.createElement("h1", null, "Fridgimon"), /*#__PURE__*/React.createElement(ReaderStatus, {
+  }), /*#__PURE__*/React.createElement(Header, null), /*#__PURE__*/React.createElement(ReaderStatus, {
     error: error,
     onDismiss: function onDismiss() {
       setError("");

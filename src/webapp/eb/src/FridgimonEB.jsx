@@ -65,7 +65,7 @@ function FridgimonEB() {
                 onScan={lookupItem}
             />
 
-            <h1>Fridgimon</h1>
+            <Header />
             <ReaderStatus
                 error={error}
                 onDismiss={() => {
