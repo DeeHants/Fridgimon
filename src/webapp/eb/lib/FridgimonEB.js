@@ -66,19 +66,6 @@ function FridgimonEB() {
       setBusy(false);
     });
   }
-  function deleteContent(content_id) {
-    setBusy(true);
-    api_remove_content({
-      content_id: content_id
-    }, function (data, error) {
-      if (!data) {
-        setError("Unable to remove contents, " + error);
-        data = [];
-      }
-      refreshItems();
-      setBusy(false);
-    });
-  }
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Busy, {
     isBusy: isBusy
   }), /*#__PURE__*/React.createElement(Reader, {
@@ -102,15 +89,10 @@ function FridgimonEB() {
       refreshItems();
     }
   }), items.map(function (item) {
-    return /*#__PURE__*/React.createElement(LineItem, {
+    return /*#__PURE__*/React.createElement(ExistingItem, {
       key: item.content_id,
       item: item,
-      actions: [{
-        caption: "Remove",
-        onClick: function onClick() {
-          deleteContent(item.content_id);
-        }
-      }]
+      onRefresh: refreshItems
     });
   }));
 }

@@ -56,24 +56,6 @@ function FridgimonEB() {
         );
     }
 
-    function deleteContent(content_id) {
-        setBusy(true);
-
-        api_remove_content(
-            {
-                content_id: content_id,
-            },
-            function (data, error) {
-                if (!data) {
-                    setError("Unable to remove contents, " + error);
-                    data = []
-                }
-                refreshItems();
-                setBusy(false);
-            }
-        );
-    }
-
     return (
         <>
             <Busy isBusy={isBusy} />
@@ -107,15 +89,10 @@ function FridgimonEB() {
                 />}
 
             {items.map(item => (
-                <LineItem
+                <ExistingItem
                     key={item.content_id}
                     item={item}
-                    actions={[
-                        {
-                            caption: "Remove",
-                            onClick: () => { deleteContent(item.content_id) }
-                        },
-                    ]}
+                    onRefresh={refreshItems}
                 />
             ))}
         </>
