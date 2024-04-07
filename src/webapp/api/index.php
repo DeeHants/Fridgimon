@@ -164,11 +164,11 @@ function api_item($method, $params, $data) {
     $result = $stmt->get_result();
 
     if ($row = $result->fetch_assoc()) {
+        $response = decorate_item($row);
         $response = array_merge(
-            $row,
+            $response,
             array(
                 'found' => true,
-                'expires' => $row['life'] !== null,
             )
         );
     } else {
@@ -264,22 +264,7 @@ function api_contents($method, $params, $data) {
 
     $response = array();
     while($row = $result->fetch_assoc()) {
-        $current_date = new DateTime(date('Y-m-d'));
-        // Check the expiry
-        if ($row['expiry'] != '') {
-            $expiry_date = new DateTime($row['expiry']);
-            $interval = $current_date->diff($expiry_date);
-            $days_left = $interval->days * ($interval->invert ? -1 : 1);
-            $row['days_left'] = $days_left;
-            $row['expired'] = $days_left < 0;
-        }
-
-        // Determine age
-        $added_date = new DateTime($row['added']);
-        $interval = $added_date->diff($current_date);
-        $days_stored = $interval->days * ($interval->invert ? -1 : 1);
-        $row['stored_for'] = $days_stored;
-
+        $row = decorate_content($row);
         $response[] = $row;
     }
 
@@ -294,6 +279,48 @@ function api_error($message, $status = 500) {
         'error' => $message,
         'status' => $status,
     );
+}
+
+/**
+ * Add additional generated fields to a "item" entry retrieved from the database.
+ *
+ * @param  array $row The original database row record from $result->fetch_assoc()
+ * @return array The modified database row record
+ */
+function decorate_item($row) {
+    $row = array_merge(
+        $row,
+        array(
+            'expires' => $row['life'] !== null,
+        )
+    );
+    return $row;
+}
+
+/**
+ * Add additional generated fields to a "content" entry retrieved from the database.
+ *
+ * @param  array $row The original database row record from $result->fetch_assoc()
+ * @return array The modified database row record
+ */
+function decorate_content($row) {
+    $current_date = new DateTime(date('Y-m-d'));
+    // Check the expiry
+    if ($row['expiry'] != '') {
+        $expiry_date = new DateTime($row['expiry']);
+        $interval = $current_date->diff($expiry_date);
+        $days_left = $interval->days * ($interval->invert ? -1 : 1);
+        $row['days_left'] = $days_left;
+        $row['expired'] = $days_left < 0;
+    }
+
+    // Determine age
+    $added_date = new DateTime($row['added']);
+    $interval = $added_date->diff($current_date);
+    $days_stored = $interval->days * ($interval->invert ? -1 : 1);
+    $row['stored_for'] = $days_stored;
+
+    return $row;
 }
 
 /**
