@@ -130,16 +130,13 @@ function api_item($method, $params, $data) {
 
     } elseif ($method == 'GET') {
         // Figure out what we're getting
-        if (($params[2] ?? 0) > 9999999 || ($params[1] ?? null)) {
-            // 8 digits or has a type is most likely a EAN/UPC
-            $item_id = null;
-            $item_code = $params[2];
-            $item_code_type = $params[1] ?? null;
-        } else {
-            // otherwise an ID
-            $item_id = $params[2];
+        $item_id = null;
+        $item_code = $params[2];
+        $item_code_type = $params[1] ?? null;
+        if (!$item_code_type && is_numeric($item_code) && $item_code <= 999999) {
+            // Numeric and 6 digits or less, it's probably an ID
+            $item_id = $item_code + 0;
             $item_code = null;
-            $item_code_type = null;
         }
     }
 
@@ -230,20 +227,13 @@ function api_contents($method, $params, $data) {
 
     } elseif ($method == 'GET') {
         // Figure out what we're getting
-        if (($params[2] ?? 0) > 9999999 || ($params[1] ?? null)) {
-            // 8 digits or has a type is most likely a EAN/UPC
-            $item_id = null;
-            $item_code = $params[2];
-            $item_code_type = $params[1] ?? null;
-        } elseif ($params[2] ?? null) {
-            // otherwise an ID
-            $item_id = $params[2];
+        $item_id = null;
+        $item_code = $params[2];
+        $item_code_type = $params[1] ?? null;
+        if (!$item_code_type && is_numeric($item_code) && $item_code <= 999999) {
+            // Numeric and 6 digits or less, it's probably an ID
+            $item_id = $item_code + 0;
             $item_code = null;
-            $item_code_type = null;
-        } else {
-            $item_id = null;
-            $item_code = null;
-            $item_code_type = null;
         }
     }
 
