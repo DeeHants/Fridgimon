@@ -6,17 +6,21 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+Date.prototype.toISODateString = function () {
+  // Format a DateTime as a local ISO date, yyyy-mm-dd
+  return "".concat(this.getFullYear(), "-").concat(("0" + (this.getMonth() + 1)).substr(-2), "-").concat(("0" + this.getDate()).substr(-2));
+};
 function NewItem(_ref) {
   var item = _ref.item,
     onRefresh = _ref.onRefresh;
   // Expiry date
   var current_date = new Date();
-  var current_date_string = "".concat(current_date.getFullYear(), "-").concat(("0" + (current_date.getMonth() + 1)).substr(-2), "-").concat(("0" + current_date.getDate()).substr(-2));
+  var current_date_string = current_date.toISODateString();
   var expiry_date = undefined;
   var expiry_date_string = undefined;
   if (item.expires) {
     expiry_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() + item.life);
-    expiry_date_string = "".concat(expiry_date.getFullYear(), "-").concat(("0" + (expiry_date.getMonth() + 1)).substr(-2), "-").concat(("0" + expiry_date.getDate()).substr(-2));
+    expiry_date_string = expiry_date.toISODateString();
   }
   var _React$useState = React.useState(expiry_date_string),
     _React$useState2 = _slicedToArray(_React$useState, 2),
