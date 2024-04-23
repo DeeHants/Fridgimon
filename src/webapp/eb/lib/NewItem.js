@@ -11,12 +11,12 @@ function NewItem(_ref) {
     onRefresh = _ref.onRefresh;
   // Expiry date
   var current_date = new Date();
-  var current_date_string = "".concat(current_date.getFullYear(), "-").concat(("0" + current_date.getMonth()).substr(-2), "-").concat(("0" + current_date.getDate()).substr(-2));
+  var current_date_string = "".concat(current_date.getFullYear(), "-").concat(("0" + (current_date.getMonth() + 1)).substr(-2), "-").concat(("0" + current_date.getDate()).substr(-2));
   var expiry_date = undefined;
   var expiry_date_string = undefined;
   if (item.expires) {
     expiry_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() + item.life);
-    expiry_date_string = "".concat(expiry_date.getFullYear(), "-").concat(("0" + expiry_date.getMonth()).substr(-2), "-").concat(("0" + expiry_date.getDate()).substr(-2));
+    expiry_date_string = "".concat(expiry_date.getFullYear(), "-").concat(("0" + (expiry_date.getMonth() + 1)).substr(-2), "-").concat(("0" + expiry_date.getDate()).substr(-2));
   }
   var _React$useState = React.useState(expiry_date_string),
     _React$useState2 = _slicedToArray(_React$useState, 2),

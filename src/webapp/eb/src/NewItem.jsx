@@ -1,12 +1,12 @@
 function NewItem({ item, onRefresh }) {
     // Expiry date
     var current_date = new Date();
-    var current_date_string = `${current_date.getFullYear()}-${("0" + current_date.getMonth()).substr(-2)}-${("0" + current_date.getDate()).substr(-2)}`;
+    var current_date_string = `${current_date.getFullYear()}-${("0" + (current_date.getMonth() + 1)).substr(-2)}-${("0" + current_date.getDate()).substr(-2)}`;
     var expiry_date = undefined;
     var expiry_date_string = undefined;
     if (item.expires) {
         expiry_date = new Date(current_date.getFullYear(), current_date.getMonth(), current_date.getDate() + item.life,);
-        expiry_date_string = `${expiry_date.getFullYear()}-${("0" + expiry_date.getMonth()).substr(-2)}-${("0" + expiry_date.getDate()).substr(-2)}`;
+        expiry_date_string = `${expiry_date.getFullYear()}-${("0" + (expiry_date.getMonth() + 1)).substr(-2)}-${("0" + expiry_date.getDate()).substr(-2)}`;
     }
     const [expiryValue, setExpiryValue] = React.useState(expiry_date_string);
 
