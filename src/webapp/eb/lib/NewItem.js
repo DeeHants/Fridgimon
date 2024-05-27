@@ -26,6 +26,7 @@ function NewItem(_ref) {
     _React$useState2 = _slicedToArray(_React$useState, 2),
     expiryValue = _React$useState2[0],
     setExpiryValue = _React$useState2[1];
+  var expiry_date_element = React.useRef(null);
   function storeItem() {
     var content = {
       item_id: item.item_id
@@ -49,12 +50,23 @@ function NewItem(_ref) {
     }]
   }, item.expires && /*#__PURE__*/React.createElement("div", {
     className: "itemExpiryEntry"
-  }, /*#__PURE__*/React.createElement("label", null, "Expiry "), /*#__PURE__*/React.createElement("input", {
+  }, /*#__PURE__*/React.createElement("label", null, "Expiry "), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      expiry_date_element.current.stepDown();
+      setExpiryValue(expiry_date_element.current.value);
+    }
+  }, "<\u2013"), /*#__PURE__*/React.createElement("input", {
+    ref: expiry_date_element,
     type: "date",
     value: expiryValue,
     min: current_date_string,
     onChange: function onChange(e) {
       return setExpiryValue(e.target.value);
     }
-  })));
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      expiry_date_element.current.stepUp();
+      setExpiryValue(expiry_date_element.current.value);
+    }
+  }, "\u2013>")));
 }

@@ -14,6 +14,7 @@ function NewItem({ item, onRefresh }) {
         expiry_date_string = expiry_date.toISODateString();
     }
     const [expiryValue, setExpiryValue] = React.useState(expiry_date_string);
+    const expiry_date_element = React.useRef(null);
 
     function storeItem() {
         var content = {
@@ -46,12 +47,21 @@ function NewItem({ item, onRefresh }) {
             {item.expires &&
                 (<div className="itemExpiryEntry">
                     <label>Expiry </label>
+                    <button onClick={() => {
+                        expiry_date_element.current.stepDown();
+                        setExpiryValue(expiry_date_element.current.value);
+                    }}>&lt;&ndash;</button>
                     <input
+                        ref={expiry_date_element}
                         type="date"
                         value={expiryValue}
                         min={current_date_string}
                         onChange={e => setExpiryValue(e.target.value)}
                     />
+                    <button onClick={() => {
+                        expiry_date_element.current.stepUp();
+                        setExpiryValue(expiry_date_element.current.value);
+                    }}>&ndash;&gt;</button>
                 </div>)}
         </LineItem>
     )
