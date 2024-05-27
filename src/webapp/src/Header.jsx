@@ -12,7 +12,7 @@ function Header() {
             }}>
                 <h1>
                     <img
-                        src="img/logo.png"
+                        src="../img/logo.png"
                         style={{
                             float: "left",
                             height: "36px",

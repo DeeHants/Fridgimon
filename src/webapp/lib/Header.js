@@ -14,7 +14,7 @@ function Header() {
       backgroundColor: "white"
     }
   }, /*#__PURE__*/React.createElement("h1", null, /*#__PURE__*/React.createElement("img", {
-    src: "img/logo.png",
+    src: "../img/logo.png",
     style: {
       "float": "left",
       height: "36px"

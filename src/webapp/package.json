@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel src -d lib",
-    "buildeb": "babel eb/src -d eb/lib"
+    "build": "babel src -d lib"
   },
   "author": "Deanna Earley <dee@earlsoft.co.uk>",
   "license": "BSD-3-Clause",
