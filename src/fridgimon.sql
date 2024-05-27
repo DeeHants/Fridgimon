@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 18, 2024 at 07:36 PM
+-- Generation Time: May 27, 2024 at 07:30 PM
 -- Server version: 10.3.28-MariaDB
 -- PHP Version: 7.2.24
 
@@ -52,7 +52,8 @@ CREATE TABLE `contents` (
   `item_id` int(11) NOT NULL,
   `container_id` int(11) NOT NULL,
   `added` date NOT NULL DEFAULT current_timestamp(),
-  `expiry` date DEFAULT NULL
+  `expiry` date DEFAULT NULL,
+  `age_checked` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -74,7 +75,8 @@ CREATE TABLE `items` (
   `code` varchar(50) DEFAULT NULL,
   `code_type` varchar(20) DEFAULT NULL,
   `name` text NOT NULL,
-  `life` int(11) DEFAULT NULL
+  `life` int(11) DEFAULT NULL,
+  `ages` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
