@@ -11,8 +11,10 @@ var appContainer;
 var appRoot;
 var appElement;
 function initReactApp() {
-  appContainer = document.getElementById('app');
+  appContainer = document.getElementById('fridgimon');
   appRoot = ReactDOM.createRoot(appContainer);
-  appElement = React.createElement(FridgimonEB, {});
+  appElement = React.createElement(Fridgimon, {
+    eb: appContainer.getAttribute("eb") === "true"
+  });
   appRoot.render(appElement);
 }

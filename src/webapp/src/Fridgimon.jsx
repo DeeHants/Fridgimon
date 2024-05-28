@@ -1,4 +1,4 @@
-function FridgimonEB() {
+function Fridgimon({ eb }) {
     // Page state
     const [isBusy, setBusy] = React.useState(false);
     const [error, setError] = React.useState(null);
@@ -58,12 +58,12 @@ function FridgimonEB() {
 
     return (
         <>
+            {/* Invisible components for external interfaces */}
             <Busy isBusy={isBusy} />
-            {/* Invisible component to manage the reader */}
-            <Reader
+            {eb && (<Reader
                 setError={setError}
                 onScan={lookupItem}
-            />
+            />)}
 
             <Header />
             <ReaderStatus

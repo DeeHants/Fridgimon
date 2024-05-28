@@ -48,7 +48,8 @@ function api_call(method, path, data, onComplete) {
     var url = "/api/" + path;
 
     // and get!
-    EB.jQuery.ajax({
+    var ajax = typeof EB === 'undefined' ? $.ajax : EB.jQuery.ajax;
+    ajax({
         type: method,
         url: url,
         data: data == undefined ? undefined : JSON.stringify(data),
