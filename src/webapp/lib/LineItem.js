@@ -25,7 +25,9 @@ function LineItem(_ref) {
     });
   })), /*#__PURE__*/React.createElement("div", {
     className: "itemName"
-  }, item.name || "Unknown"), /*#__PURE__*/React.createElement("div", {
+  }, item.name || "Unknown", item.variant && /*#__PURE__*/React.createElement("span", {
+    className: "itemVariant"
+  }, " (", item.variant, ")")), /*#__PURE__*/React.createElement("div", {
     className: "itemCode"
   }, item.code), item.expiry && /*#__PURE__*/React.createElement("div", {
     className: "itemExpiry"
