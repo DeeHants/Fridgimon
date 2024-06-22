@@ -70,6 +70,12 @@ if ($error) {
     );
 }
 
+// UTF-8 encode all values
+array_walk_recursive($response, function (&$item, $key) {
+    if (!is_string($item)) { return; }
+    $item = mb_convert_encoding($item, 'UTF-8', 'ISO-8859-1'); # ISO-8859-1 may be specific to my setup, change as needed
+});
+
 // Output the response as JSON
 http_response_code($status);
 header("Content-Type: application/json");
