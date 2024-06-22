@@ -61,7 +61,7 @@ function api_contents($method, $params, $data) {
     } elseif ($method == 'GET') {
         // Figure out what we're getting
         $item_id = null;
-        $item_code = $params[2];
+        $item_code = $params[2] ?? null;
         $item_code_type = $params[1] ?? null;
         if (!$item_code_type && is_numeric($item_code) && $item_code <= 999999) {
             // Numeric and 6 digits or less, it's probably an ID
