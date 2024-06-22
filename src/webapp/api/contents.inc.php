@@ -25,6 +25,8 @@ function api_contents($method, $params, $data) {
     $item_fields = array(
         "code" => "s",
         "name" => "s",
+        "variant" => "s",
+        "category" => "s",
     );
 
     if ($method == 'POST') {

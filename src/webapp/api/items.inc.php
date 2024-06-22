@@ -17,6 +17,8 @@ function api_item($method, $params, $data) {
         "code_type" => "s",
         "name" => "s",
         "life" => "i",
+        "variant" => "s",
+        "category" => "s",
     );
 
     if ($method == 'POST') {
