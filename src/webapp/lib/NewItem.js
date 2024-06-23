@@ -12,7 +12,8 @@ Date.prototype.toISODateString = function () {
 };
 function NewItem(_ref) {
   var item = _ref.item,
-    onRefresh = _ref.onRefresh;
+    onRefresh = _ref.onRefresh,
+    setFilter = _ref.setFilter;
   // Expiry date
   var current_date = new Date();
   var current_date_string = current_date.toISODateString();
@@ -45,6 +46,13 @@ function NewItem(_ref) {
     item: item,
     marker: "lightgrey",
     actions: [{
+      caption: "Similar",
+      onClick: function onClick() {
+        setFilter({
+          category: item.category
+        });
+      }
+    }, {
       caption: "Store",
       onClick: storeItem
     }]

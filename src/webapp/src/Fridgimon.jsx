@@ -3,6 +3,7 @@ function Fridgimon({ eb }) {
     const [isBusy, setBusy] = React.useState(false);
     const [error, setError] = React.useState(null);
     const [scannerResult, setScannerResult] = React.useState(null);
+    const [filter, setFilter] = React.useState({});
 
     const [items, setItems] = React.useState([]);
 
@@ -31,17 +32,19 @@ function Fridgimon({ eb }) {
 
     // Contents
     React.useEffect(() => {
-        refreshItems();
+        var newFilter = {}
+        if (scannerResult) {
+            newFilter.code = scannerResult.code;
+        }
+        setFilter(newFilter);
     }, [scannerResult]);
+
+    React.useEffect(() => {
+        refreshItems();
+    }, [filter]);
 
     function refreshItems() {
         setBusy(true);
-
-        // Filter on the current scanned item
-        var filter = {};
-        if (scannerResult) {
-            filter.code = scannerResult.code;
-        }
 
         api_get_contents(
             filter,
@@ -73,19 +76,26 @@ function Fridgimon({ eb }) {
                 }}
             />
 
+            {(scannerResult || filter.code || filter.category) && (
+                <div>
+                    <button onClick={() => {
+                        setScannerResult();
+                        setFilter({});
+                    }}>Clear filter</button>
+                </div >
+            )}
+
             {scannerResult &&
                 <ScannedItem
                     key={scannerResult.code}
                     item={scannerResult}
-                    onClear={() => {
-                        setScannerResult();
-                    }}
                     onRefresh={(new_item) => {
                         if (new_item) {
                             setScannerResult(new_item);
                         }
                         refreshItems();
                     }}
+                    setFilter={setFilter}
                 />}
 
             {items.map(item => (
@@ -93,6 +103,7 @@ function Fridgimon({ eb }) {
                     key={item.content_id}
                     item={item}
                     onRefresh={refreshItems}
+                    setFilter={setFilter}
                 />
             ))}
         </>

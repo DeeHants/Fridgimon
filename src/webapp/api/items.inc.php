@@ -10,7 +10,7 @@ $apis[] = array(
     'handler' => "api_item",
 );
 
-function api_item($method, $params, $data) {
+function api_item($api, $method, $params, $data) {
     global $mysqli;
     $fields = array(
         "code" => "s",

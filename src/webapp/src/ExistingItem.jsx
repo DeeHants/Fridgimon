@@ -1,4 +1,4 @@
-function ExistingItem({ item, onRefresh }) {
+function ExistingItem({ item, onRefresh, setFilter }) {
     function deleteContent(content_id) {
         api_remove_content(
             {
@@ -20,6 +20,14 @@ function ExistingItem({ item, onRefresh }) {
                 key={item.content_id}
                 item={item}
                 actions={[
+                    {
+                        caption: "Similar",
+                        onClick: () => {
+                            setFilter({
+                                category: item.category,
+                            });
+                        }
+                    },
                     {
                         caption: "Remove",
                         onClick: () => { deleteContent(item.content_id) }

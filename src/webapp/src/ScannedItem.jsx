@@ -1,15 +1,12 @@
-function ScannedItem({ item, onClear, onRefresh }) {
+function ScannedItem({ item, onRefresh, setFilter }) {
     return (
         <>
-            <div>
-                <button onClick={onClear}>Clear</button>
-            </div>
-
             {/* Register a new item */}
             {!item.found && (
                 <UnknownItem
                     item={item}
                     onRefresh={onRefresh}
+                    setFilter={setFilter}
                 />
             )}
 
@@ -18,6 +15,7 @@ function ScannedItem({ item, onClear, onRefresh }) {
                 <NewItem
                     item={item}
                     onRefresh={onRefresh}
+                    setFilter={setFilter}
                 />
             )}
         </>

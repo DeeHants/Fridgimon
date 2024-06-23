@@ -21,10 +21,14 @@ function Fridgimon(_ref) {
     _React$useState6 = _slicedToArray(_React$useState5, 2),
     scannerResult = _React$useState6[0],
     setScannerResult = _React$useState6[1];
-  var _React$useState7 = React.useState([]),
+  var _React$useState7 = React.useState({}),
     _React$useState8 = _slicedToArray(_React$useState7, 2),
-    items = _React$useState8[0],
-    setItems = _React$useState8[1];
+    filter = _React$useState8[0],
+    setFilter = _React$useState8[1];
+  var _React$useState9 = React.useState([]),
+    _React$useState10 = _slicedToArray(_React$useState9, 2),
+    items = _React$useState10[0],
+    setItems = _React$useState10[1];
 
   // Handle scan events
   function lookupItem(scan_data, scan_source, _scan_type) {
@@ -48,16 +52,17 @@ function Fridgimon(_ref) {
 
   // Contents
   React.useEffect(function () {
-    refreshItems();
+    var newFilter = {};
+    if (scannerResult) {
+      newFilter.code = scannerResult.code;
+    }
+    setFilter(newFilter);
   }, [scannerResult]);
+  React.useEffect(function () {
+    refreshItems();
+  }, [filter]);
   function refreshItems() {
     setBusy(true);
-
-    // Filter on the current scanned item
-    var filter = {};
-    if (scannerResult) {
-      filter.code = scannerResult.code;
-    }
     api_get_contents(filter, function (data, error) {
       if (!data) {
         setError("Unable to get contents, " + error);
@@ -77,23 +82,27 @@ function Fridgimon(_ref) {
     onDismiss: function onDismiss() {
       setError("");
     }
-  }), scannerResult && /*#__PURE__*/React.createElement(ScannedItem, {
+  }), (scannerResult || filter.code || filter.category) && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      setScannerResult();
+      setFilter({});
+    }
+  }, "Clear filter")), scannerResult && /*#__PURE__*/React.createElement(ScannedItem, {
     key: scannerResult.code,
     item: scannerResult,
-    onClear: function onClear() {
-      setScannerResult();
-    },
     onRefresh: function onRefresh(new_item) {
       if (new_item) {
         setScannerResult(new_item);
       }
       refreshItems();
-    }
+    },
+    setFilter: setFilter
   }), items.map(function (item) {
     return /*#__PURE__*/React.createElement(ExistingItem, {
       key: item.content_id,
       item: item,
-      onRefresh: refreshItems
+      onRefresh: refreshItems,
+      setFilter: setFilter
     });
   }));
 }

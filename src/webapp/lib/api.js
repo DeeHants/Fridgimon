@@ -12,6 +12,8 @@ function api_get_contents(filter, onComplete) {
   var call = "contents";
   if (filter && filter['code']) {
     call += "/" + encodeURIComponent(filter['code']);
+  } else if (filter && filter['category']) {
+    call += "/category/" + encodeURIComponent(filter['category']);
   }
   api_call('GET', call, undefined, onComplete);
 }

@@ -50,7 +50,7 @@ foreach ($apis as $api) {
 
     // Call the handler
     $handler = $api['handler'];
-    $result = $handler($method, $matches, $data);
+    $result = $handler($api, $method, $matches, $data);
 
     // Set the results
     if (array_key_exists('response', $result)) { $response = $result['response']; }
@@ -81,7 +81,7 @@ http_response_code($status);
 header("Content-Type: application/json");
 print json_encode($response, JSON_PRETTY_PRINT);
 
-function api_hello($method, $params, $data) {
+function api_hello($api, $method, $params, $data) {
     $response = array(
         'hello' => "Hello " . $_SERVER['REMOTE_ADDR'],
     );

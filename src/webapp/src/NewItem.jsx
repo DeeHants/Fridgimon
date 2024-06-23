@@ -3,7 +3,7 @@ Date.prototype.toISODateString = function () {
     return `${this.getFullYear()}-${("0" + (this.getMonth() + 1)).substr(-2)}-${("0" + this.getDate()).substr(-2)}`;
 };
 
-function NewItem({ item, onRefresh }) {
+function NewItem({ item, onRefresh, setFilter }) {
     // Expiry date
     var current_date = new Date();
     var current_date_string = current_date.toISODateString();
@@ -38,6 +38,14 @@ function NewItem({ item, onRefresh }) {
             item={item}
             marker="lightgrey"
             actions={[
+                {
+                    caption: "Similar",
+                    onClick: () => {
+                        setFilter({
+                            category: item.category,
+                        });
+                    }
+                },
                 {
                     caption: "Store",
                     onClick: storeItem

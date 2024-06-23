@@ -1,6 +1,13 @@
 <?php
 $apis[] = array(
+    'key' => 'item',
     'pattern' => 'contents(?:\/(?:([a-zA-Z0-9]+):)?([0-9]+))?',
+    'methods' => array("GET"),
+    'handler' => "api_contents",
+);
+$apis[] = array(
+    'key' => 'category',
+    'pattern' => 'contents\/category\/(.+)',
     'methods' => array("GET"),
     'handler' => "api_contents",
 );
@@ -15,7 +22,7 @@ $apis[] = array(
     'handler' => "api_contents",
 );
 
-function api_contents($method, $params, $data) {
+function api_contents($api, $method, $params, $data) {
     global $mysqli;
     $fields = array(
         "item_id" => "i",
@@ -60,7 +67,7 @@ function api_contents($method, $params, $data) {
         $stmt->execute();
         if ($mysqli->error) { return api_error($mysqli->error); }
 
-    } elseif ($method == 'GET') {
+    } elseif ($method == 'GET' && $api['key'] == "item") {
         // Figure out what we're getting
         $item_id = null;
         $item_code = $params[2] ?? null;
@@ -70,6 +77,15 @@ function api_contents($method, $params, $data) {
             $item_id = $item_code + 0;
             $item_code = null;
         }
+
+    } elseif ($method == 'GET' && $api['key'] == "category") {
+        // Figure out what we're getting
+        $item_id = null;
+        $item_code = null;
+
+        $filter = "`items`.`category` = ?";
+        $filter_bind = 's';
+        $filter_params = array($params[1]);
     }
 
     // Lookup the contents
@@ -79,6 +95,9 @@ function api_contents($method, $params, $data) {
     } elseif ($item_code != null) {
         $stmt = $mysqli->prepare("SELECT `content_id`, " . field_names($fields, "contents") . ", " . field_names($item_fields, "items") . ", `container_id` as `container` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE `code`=?");
         $stmt->bind_param("s", $item_code);
+    } elseif ($filter != null) {
+        $stmt = $mysqli->prepare("SELECT `content_id`, " . field_names($fields, "contents") . ", " . field_names($item_fields, "items") . ", `container_id` as `container` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE " . $filter);
+        $stmt->bind_param($filter_bind, ...$filter_params);
     } else {
         $stmt = $mysqli->prepare("SELECT `content_id`, " . field_names($fields, "contents") . ", " . field_names($item_fields, "items") . ", `container_id` as `container` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`");
     }

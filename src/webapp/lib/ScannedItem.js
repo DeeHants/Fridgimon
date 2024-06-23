@@ -2,15 +2,15 @@
 
 function ScannedItem(_ref) {
   var item = _ref.item,
-    onClear = _ref.onClear,
-    onRefresh = _ref.onRefresh;
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
-    onClick: onClear
-  }, "Clear")), !item.found && /*#__PURE__*/React.createElement(UnknownItem, {
+    onRefresh = _ref.onRefresh,
+    setFilter = _ref.setFilter;
+  return /*#__PURE__*/React.createElement(React.Fragment, null, !item.found && /*#__PURE__*/React.createElement(UnknownItem, {
     item: item,
-    onRefresh: onRefresh
+    onRefresh: onRefresh,
+    setFilter: setFilter
   }), item.found && /*#__PURE__*/React.createElement(NewItem, {
     item: item,
-    onRefresh: onRefresh
+    onRefresh: onRefresh,
+    setFilter: setFilter
   }));
 }
