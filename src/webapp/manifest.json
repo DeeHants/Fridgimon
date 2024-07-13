@@ -1,0 +1,17 @@
+{
+    "name": "Fridgimon",
+    "icons": [
+        {
+            "src": "img/logo.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": ".",
+    "display": "standalone",
+    "orientation": "portrait",
+    "categories": [
+        "food",
+        "shopping"
+    ]
+}
