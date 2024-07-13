@@ -26,7 +26,8 @@ function ExistingItem({ item, onRefresh, setFilter }) {
                             setFilter({
                                 category: item.category,
                             });
-                        }
+                        },
+                        disabled: !item.category,
                     },
                     {
                         caption: "Remove",
