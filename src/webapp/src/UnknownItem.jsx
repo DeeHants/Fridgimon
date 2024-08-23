@@ -47,14 +47,6 @@ function UnknownItem({ item, onRefresh }) {
                     checked={itemLife != null}
                     onChange={e => setItemLife(e.target.checked ? 14 : null)}
                 />
-                <br />
-                <label>Life </label>
-                <input
-                    type="number"
-                    value={itemLife || ''}
-                    disabled={itemLife == null}
-                    onChange={e => setItemLife(e.target.value)}
-                />
             </div>
         </LineItem>
     )

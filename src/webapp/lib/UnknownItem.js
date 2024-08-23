@@ -55,12 +55,5 @@ function UnknownItem(_ref) {
     onChange: function onChange(e) {
       return setItemLife(e.target.checked ? 14 : null);
     }
-  }), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("label", null, "Life "), /*#__PURE__*/React.createElement("input", {
-    type: "number",
-    value: itemLife || '',
-    disabled: itemLife == null,
-    onChange: function onChange(e) {
-      return setItemLife(e.target.value);
-    }
   })));
 }
