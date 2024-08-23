@@ -2,15 +2,22 @@ function UnknownItem({ item, onRefresh }) {
     // New item
     const [itemName, setItemName] = React.useState("");
     const [itemVariant, setItemVariant] = React.useState(null);
+    const [itemQualification, setItemQualification] = React.useState(null);
+    const [itemQuantity, setItemQuantity] = React.useState(null);
+    const [itemSize, setItemSize] = React.useState(null);
     const [itemCategory, setItemCategory] = React.useState(null);
     const [itemLife, setItemLife] = React.useState(null);
 
     function registerItem() {
+        var name = itemName
+        if (itemQualification) { name += ' - ' + itemQualification }
+        if (itemQuantity) { name += ' x ' + itemQuantity }
+        if (itemSize) { name += ' - ' + itemSize }
         api_register_new_item(
             {
                 code: item.code,
                 code_type: item.code_type,
-                name: itemName,
+                name: name,
                 variant: itemVariant,
                 category: itemCategory,
                 life: itemLife,
@@ -42,6 +49,32 @@ function UnknownItem({ item, onRefresh }) {
                     type="text"
                     value={itemName}
                     onChange={e => setItemName(e.target.value)}
+                />
+            </div>
+            <div className="itemQualificationEntry">
+                <label>Qualification </label>
+                <input
+                    type="text"
+                    value={itemQualification}
+                    onChange={e => setItemQualification(e.target.value || null)}
+                />
+            </div>
+            <div className="itemQuantityEntry">
+                <label>Quantity </label>
+                <input
+                    type="number"
+                    value={itemQuantity}
+                    disabled={itemSize != null}
+                    onChange={e => setItemQuantity(e.target.value || null)}
+                />
+            </div>
+            <div className="itemSizeEntry">
+                <label>Size </label>
+                <input
+                    type="text"
+                    value={itemSize}
+                    disabled={itemQuantity != null}
+                    onChange={e => setItemSize(e.target.value || null)}
                 />
             </div>
             <div className="itemVariantEntry">

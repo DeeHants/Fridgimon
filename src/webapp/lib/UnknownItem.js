@@ -20,17 +20,39 @@ function UnknownItem(_ref) {
     setItemVariant = _React$useState4[1];
   var _React$useState5 = React.useState(null),
     _React$useState6 = _slicedToArray(_React$useState5, 2),
-    itemCategory = _React$useState6[0],
-    setItemCategory = _React$useState6[1];
+    itemQualification = _React$useState6[0],
+    setItemQualification = _React$useState6[1];
   var _React$useState7 = React.useState(null),
     _React$useState8 = _slicedToArray(_React$useState7, 2),
-    itemLife = _React$useState8[0],
-    setItemLife = _React$useState8[1];
+    itemQuantity = _React$useState8[0],
+    setItemQuantity = _React$useState8[1];
+  var _React$useState9 = React.useState(null),
+    _React$useState10 = _slicedToArray(_React$useState9, 2),
+    itemSize = _React$useState10[0],
+    setItemSize = _React$useState10[1];
+  var _React$useState11 = React.useState(null),
+    _React$useState12 = _slicedToArray(_React$useState11, 2),
+    itemCategory = _React$useState12[0],
+    setItemCategory = _React$useState12[1];
+  var _React$useState13 = React.useState(null),
+    _React$useState14 = _slicedToArray(_React$useState13, 2),
+    itemLife = _React$useState14[0],
+    setItemLife = _React$useState14[1];
   function registerItem() {
+    var name = itemName;
+    if (itemQualification) {
+      name += ' - ' + itemQualification;
+    }
+    if (itemQuantity) {
+      name += ' x ' + itemQuantity;
+    }
+    if (itemSize) {
+      name += ' - ' + itemSize;
+    }
     api_register_new_item({
       code: item.code,
       code_type: item.code_type,
-      name: itemName,
+      name: name,
       variant: itemVariant,
       category: itemCategory,
       life: itemLife
@@ -56,6 +78,32 @@ function UnknownItem(_ref) {
     value: itemName,
     onChange: function onChange(e) {
       return setItemName(e.target.value);
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "itemQualificationEntry"
+  }, /*#__PURE__*/React.createElement("label", null, "Qualification "), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: itemQualification,
+    onChange: function onChange(e) {
+      return setItemQualification(e.target.value || null);
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "itemQuantityEntry"
+  }, /*#__PURE__*/React.createElement("label", null, "Quantity "), /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    value: itemQuantity,
+    disabled: itemSize != null,
+    onChange: function onChange(e) {
+      return setItemQuantity(e.target.value || null);
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "itemSizeEntry"
+  }, /*#__PURE__*/React.createElement("label", null, "Size "), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: itemSize,
+    disabled: itemQuantity != null,
+    onChange: function onChange(e) {
+      return setItemSize(e.target.value || null);
     }
   })), /*#__PURE__*/React.createElement("div", {
     className: "itemVariantEntry"
