@@ -16,13 +16,23 @@ function UnknownItem(_ref) {
     setItemName = _React$useState2[1];
   var _React$useState3 = React.useState(null),
     _React$useState4 = _slicedToArray(_React$useState3, 2),
-    itemLife = _React$useState4[0],
-    setItemLife = _React$useState4[1];
+    itemVariant = _React$useState4[0],
+    setItemVariant = _React$useState4[1];
+  var _React$useState5 = React.useState(null),
+    _React$useState6 = _slicedToArray(_React$useState5, 2),
+    itemCategory = _React$useState6[0],
+    setItemCategory = _React$useState6[1];
+  var _React$useState7 = React.useState(null),
+    _React$useState8 = _slicedToArray(_React$useState7, 2),
+    itemLife = _React$useState8[0],
+    setItemLife = _React$useState8[1];
   function registerItem() {
     api_register_new_item({
       code: item.code,
       code_type: item.code_type,
       name: itemName,
+      variant: itemVariant,
+      category: itemCategory,
       life: itemLife
     }, function (data, error) {
       if (!data) {
@@ -46,6 +56,22 @@ function UnknownItem(_ref) {
     value: itemName,
     onChange: function onChange(e) {
       return setItemName(e.target.value);
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "itemVariantEntry"
+  }, /*#__PURE__*/React.createElement("label", null, "Variant "), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: itemVariant,
+    onChange: function onChange(e) {
+      return setItemVariant(e.target.value || null);
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "itemCategoryEntry"
+  }, /*#__PURE__*/React.createElement("label", null, "Category "), /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    value: itemCategory,
+    onChange: function onChange(e) {
+      return setItemCategory(e.target.value || null);
     }
   })), /*#__PURE__*/React.createElement("div", {
     className: "itemLifeEntry"
