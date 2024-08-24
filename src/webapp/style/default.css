@@ -34,3 +34,16 @@ body {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+.item .itemEntry {
+    display: table-row;
+}
+
+.item .itemEntry label {
+    display: table-cell;
+    padding-right: 10px;
+}
+
+.item .itemEntry input {
+    display: table-cell;
+}

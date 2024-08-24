@@ -72,24 +72,24 @@ function UnknownItem(_ref) {
       disabled: itemName == '' || itemName == null
     }]
   }, /*#__PURE__*/React.createElement("div", {
-    className: "itemNameEntry"
-  }, /*#__PURE__*/React.createElement("label", null, "Name "), /*#__PURE__*/React.createElement("input", {
+    className: "itemEntry itemNameEntry"
+  }, /*#__PURE__*/React.createElement("label", null, "Name"), /*#__PURE__*/React.createElement("input", {
     type: "text",
     value: itemName,
     onChange: function onChange(e) {
       return setItemName(e.target.value);
     }
   })), /*#__PURE__*/React.createElement("div", {
-    className: "itemQualificationEntry"
-  }, /*#__PURE__*/React.createElement("label", null, "Qualification "), /*#__PURE__*/React.createElement("input", {
+    className: "itemEntry itemQualificationEntry"
+  }, /*#__PURE__*/React.createElement("label", null, "Qualification"), /*#__PURE__*/React.createElement("input", {
     type: "text",
     value: itemQualification,
     onChange: function onChange(e) {
       return setItemQualification(e.target.value || null);
     }
   })), /*#__PURE__*/React.createElement("div", {
-    className: "itemQuantityEntry"
-  }, /*#__PURE__*/React.createElement("label", null, "Quantity "), /*#__PURE__*/React.createElement("input", {
+    className: "itemEntry itemQuantityEntry"
+  }, /*#__PURE__*/React.createElement("label", null, "Quantity"), /*#__PURE__*/React.createElement("input", {
     type: "number",
     value: itemQuantity,
     disabled: itemSize != null,
@@ -97,8 +97,8 @@ function UnknownItem(_ref) {
       return setItemQuantity(e.target.value || null);
     }
   })), /*#__PURE__*/React.createElement("div", {
-    className: "itemSizeEntry"
-  }, /*#__PURE__*/React.createElement("label", null, "Size "), /*#__PURE__*/React.createElement("input", {
+    className: "itemEntry itemSizeEntry"
+  }, /*#__PURE__*/React.createElement("label", null, "Size"), /*#__PURE__*/React.createElement("input", {
     type: "text",
     value: itemSize,
     disabled: itemQuantity != null,
@@ -106,24 +106,24 @@ function UnknownItem(_ref) {
       return setItemSize(e.target.value || null);
     }
   })), /*#__PURE__*/React.createElement("div", {
-    className: "itemVariantEntry"
-  }, /*#__PURE__*/React.createElement("label", null, "Variant "), /*#__PURE__*/React.createElement("input", {
+    className: "itemEntry itemVariantEntry"
+  }, /*#__PURE__*/React.createElement("label", null, "Variant"), /*#__PURE__*/React.createElement("input", {
     type: "text",
     value: itemVariant,
     onChange: function onChange(e) {
       return setItemVariant(e.target.value || null);
     }
   })), /*#__PURE__*/React.createElement("div", {
-    className: "itemCategoryEntry"
-  }, /*#__PURE__*/React.createElement("label", null, "Category "), /*#__PURE__*/React.createElement("input", {
+    className: "itemEntry itemCategoryEntry"
+  }, /*#__PURE__*/React.createElement("label", null, "Category"), /*#__PURE__*/React.createElement("input", {
     type: "text",
     value: itemCategory,
     onChange: function onChange(e) {
       return setItemCategory(e.target.value || null);
     }
   })), /*#__PURE__*/React.createElement("div", {
-    className: "itemLifeEntry"
-  }, /*#__PURE__*/React.createElement("label", null, "Expires "), /*#__PURE__*/React.createElement("input", {
+    className: "itemEntry itemLifeEntry"
+  }, /*#__PURE__*/React.createElement("label", null, "Expires"), /*#__PURE__*/React.createElement("input", {
     type: "checkbox",
     checked: itemLife != null,
     onChange: function onChange(e) {

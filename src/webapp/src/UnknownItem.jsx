@@ -43,24 +43,24 @@ function UnknownItem({ item, onRefresh }) {
                 }
             ]}
         >
-            <div className="itemNameEntry">
-                <label>Name </label>
+            <div className="itemEntry itemNameEntry">
+                <label>Name</label>
                 <input
                     type="text"
                     value={itemName}
                     onChange={e => setItemName(e.target.value)}
                 />
             </div>
-            <div className="itemQualificationEntry">
-                <label>Qualification </label>
+            <div className="itemEntry itemQualificationEntry">
+                <label>Qualification</label>
                 <input
                     type="text"
                     value={itemQualification}
                     onChange={e => setItemQualification(e.target.value || null)}
                 />
             </div>
-            <div className="itemQuantityEntry">
-                <label>Quantity </label>
+            <div className="itemEntry itemQuantityEntry">
+                <label>Quantity</label>
                 <input
                     type="number"
                     value={itemQuantity}
@@ -68,8 +68,8 @@ function UnknownItem({ item, onRefresh }) {
                     onChange={e => setItemQuantity(e.target.value || null)}
                 />
             </div>
-            <div className="itemSizeEntry">
-                <label>Size </label>
+            <div className="itemEntry itemSizeEntry">
+                <label>Size</label>
                 <input
                     type="text"
                     value={itemSize}
@@ -77,24 +77,24 @@ function UnknownItem({ item, onRefresh }) {
                     onChange={e => setItemSize(e.target.value || null)}
                 />
             </div>
-            <div className="itemVariantEntry">
-                <label>Variant </label>
+            <div className="itemEntry itemVariantEntry">
+                <label>Variant</label>
                 <input
                     type="text"
                     value={itemVariant}
                     onChange={e => setItemVariant(e.target.value || null)}
                 />
             </div>
-            <div className="itemCategoryEntry">
-                <label>Category </label>
+            <div className="itemEntry itemCategoryEntry">
+                <label>Category</label>
                 <input
                     type="text"
                     value={itemCategory}
                     onChange={e => setItemCategory(e.target.value || null)}
                 />
             </div>
-            <div className="itemLifeEntry">
-                <label>Expires </label>
+            <div className="itemEntry itemLifeEntry">
+                <label>Expires</label>
                 <input
                     type="checkbox"
                     checked={itemLife != null}
