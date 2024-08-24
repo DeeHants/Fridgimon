@@ -43,12 +43,12 @@ function api_item($api, $method, $params, $data) {
     }
 
     // Lookup the resulting item
-    if ($item_id != null) {
+    if (isset($item_id)) {
         $stmt = $mysqli->prepare("SELECT `item_id`, " . field_names($fields) . " FROM `items` WHERE `item_id`=?");
         $stmt->bind_param("i",
             $item_id
         );
-    } elseif ($item_code != null) {
+    } elseif (isset($item_code)) {
         $stmt = $mysqli->prepare("SELECT `item_id`, " . field_names($fields) . " FROM `items` WHERE `code`=? and (`code_type`=? or `code_type` is null or ? is null)");
         $stmt->bind_param("sss",
             $item_code,

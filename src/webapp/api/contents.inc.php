@@ -94,7 +94,7 @@ function api_contents($api, $method, $params, $data) {
     }
 
     // Lookup the contents
-    if ($item_id != null) {
+    if (isset($item_id)) {
         $stmt = $mysqli->prepare("SELECT
                 count(*) as `quantity`,
                 `content_id`,
@@ -111,7 +111,7 @@ function api_contents($api, $method, $params, $data) {
                 min(`added`)
         ");
         $stmt->bind_param("i", $item_id);
-    } elseif ($item_code != null) {
+    } elseif (isset($item_code)) {
         $stmt = $mysqli->prepare("SELECT
                 count(*) as `quantity`,
                 `content_id`,
@@ -128,7 +128,7 @@ function api_contents($api, $method, $params, $data) {
                 min(`added`)
         ");
         $stmt->bind_param("s", $item_code);
-    } elseif ($filter != null) {
+    } elseif (isset($filter)) {
         $stmt = $mysqli->prepare("SELECT
                 count(*) as `quantity`,
                 `content_id`,

@@ -108,7 +108,7 @@ function decorate_item($row) {
     $row = array_merge(
         $row,
         array(
-            'expires' => $row['life'] !== null,
+            'expires' => isset($row['life']),
         )
     );
     return $row;
