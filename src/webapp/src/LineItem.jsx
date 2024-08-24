@@ -22,6 +22,7 @@ function LineItem({ item, marker, children, actions }) {
             )}
 
             <div className="itemName">
+                {item.quantity > 1 && (<span className="itemQuantity">{item.quantity} of </span>)}
                 {item.name || "Unknown"}
                 {item.variant && (<span className="itemVariant"> ({item.variant})</span>)}
             </div>

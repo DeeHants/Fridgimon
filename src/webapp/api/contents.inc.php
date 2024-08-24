@@ -35,6 +35,11 @@ function api_contents($api, $method, $params, $data) {
         "variant" => "s",
         "category" => "s",
     );
+    $group_fields = array(
+        "item_id" => "",
+        "container_id" => "",
+        "expiry" => "",
+    );
 
     if ($method == 'POST') {
         if (!$data['added']) { $data['added'] = date('Y-m-d'); }
@@ -90,16 +95,70 @@ function api_contents($api, $method, $params, $data) {
 
     // Lookup the contents
     if ($item_id != null) {
-        $stmt = $mysqli->prepare("SELECT `content_id`, " . field_names($fields, "contents") . ", " . field_names($item_fields, "items") . ", `container_id` as `container` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE `items`.`item_id`=?");
+        $stmt = $mysqli->prepare("SELECT
+                count(*) as `quantity`,
+                `content_id`,
+                " . field_names($fields, "contents") . ",
+                " . field_names($item_fields, "items") . ",
+                `container_id` as `container`
+            FROM
+                `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`
+            WHERE
+                `items`.`item_id`=?
+            GROUP BY
+                " . field_names($fields) . "
+            ORDER BY
+                min(`added`)
+        ");
         $stmt->bind_param("i", $item_id);
     } elseif ($item_code != null) {
-        $stmt = $mysqli->prepare("SELECT `content_id`, " . field_names($fields, "contents") . ", " . field_names($item_fields, "items") . ", `container_id` as `container` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE `code`=?");
+        $stmt = $mysqli->prepare("SELECT
+                count(*) as `quantity`,
+                `content_id`,
+                " . field_names($fields, "contents") . ",
+                " . field_names($item_fields, "items") . ",
+                `container_id` as `container`
+            FROM
+                `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`
+            WHERE
+                `code`=?
+            GROUP BY
+                " . field_names($fields) . "
+            ORDER BY
+                min(`added`)
+        ");
         $stmt->bind_param("s", $item_code);
     } elseif ($filter != null) {
-        $stmt = $mysqli->prepare("SELECT `content_id`, " . field_names($fields, "contents") . ", " . field_names($item_fields, "items") . ", `container_id` as `container` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE " . $filter);
+        $stmt = $mysqli->prepare("SELECT
+                count(*) as `quantity`,
+                `content_id`,
+                " . field_names($fields, "contents") . ",
+                " . field_names($item_fields, "items") . ",
+                `container_id` as `container`
+            FROM
+                `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`
+            WHERE
+                " . $filter . "
+            GROUP BY
+                " . field_names($fields) . "
+            ORDER BY
+                min(`added`)
+        ");
         $stmt->bind_param($filter_bind, ...$filter_params);
     } else {
-        $stmt = $mysqli->prepare("SELECT `content_id`, " . field_names($fields, "contents") . ", " . field_names($item_fields, "items") . ", `container_id` as `container` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`");
+        $stmt = $mysqli->prepare("SELECT
+                count(*) as `quantity`,
+                `content_id`,
+                " . field_names($fields, "contents") . ",
+                " . field_names($item_fields, "items") . ",
+                `container_id` as `container`
+            FROM
+                `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`
+            GROUP BY
+                " . field_names($fields) . "
+            ORDER BY
+                min(`added`)
+        ");
     }
 
     $stmt->execute();
