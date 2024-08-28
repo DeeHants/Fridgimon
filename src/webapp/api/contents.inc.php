@@ -99,72 +99,37 @@ function api_contents($api, $method, $params, $data) {
         $filter_params = array($params[1]);
     }
 
-    // Lookup the contents
+    // Set the filter if there are ID/code values
     if (isset($item_id)) {
-        $stmt = $mysqli->prepare("SELECT
-                count(*) as `quantity`,
-                `content_id`,
-                " . field_names($fields, "contents") . ",
-                " . field_names($item_fields, "items") . ",
-                `container_id` as `container`
-            FROM
-                `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`
-            WHERE
-                `items`.`item_id`=?
-            GROUP BY
-                " . field_names($fields) . "
-            ORDER BY
-                min(`added`)
-        ");
-        $stmt->bind_param("i", $item_id);
+        $filter = "`items`.`item_id` = ?";
+        $filter_bind = 'i';
+        $filter_params = array($item_id);
     } elseif (isset($item_code)) {
-        $stmt = $mysqli->prepare("SELECT
-                count(*) as `quantity`,
-                `content_id`,
-                " . field_names($fields, "contents") . ",
-                " . field_names($item_fields, "items") . ",
-                `container_id` as `container`
-            FROM
-                `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`
-            WHERE
-                `code`=?
-            GROUP BY
-                " . field_names($fields) . "
-            ORDER BY
-                min(`added`)
-        ");
-        $stmt->bind_param("s", $item_code);
-    } elseif (isset($filter)) {
-        $stmt = $mysqli->prepare("SELECT
-                count(*) as `quantity`,
-                `content_id`,
-                " . field_names($fields, "contents") . ",
-                " . field_names($item_fields, "items") . ",
-                `container_id` as `container`
-            FROM
-                `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`
-            WHERE
-                " . $filter . "
-            GROUP BY
-                " . field_names($fields) . "
-            ORDER BY
-                min(`added`)
-        ");
+        $filter = "`code` = ?";
+        $filter_bind = 's';
+        $filter_params = array($item_code);
+    }
+
+    // Lookup the contents
+    $stmt = $mysqli->prepare("SELECT
+            count(*) as `quantity`,
+            `content_id`,
+            " . field_names($fields, "contents") . ",
+            " . field_names($item_fields, "items") . ",
+            `container_id` as `container`
+        FROM
+            `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`
+        " . (isset($filter) ? ("
+        WHERE
+            " . $filter . "
+        ") : "") . "
+        GROUP BY
+            " . field_names($fields) . "
+        ORDER BY
+            min(`added`)
+    ");
+    if (isset($filter)) {
         $stmt->bind_param($filter_bind, ...$filter_params);
-    } else {
-        $stmt = $mysqli->prepare("SELECT
-                count(*) as `quantity`,
-                `content_id`,
-                " . field_names($fields, "contents") . ",
-                " . field_names($item_fields, "items") . ",
-                `container_id` as `container`
-            FROM
-                `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`
-            GROUP BY
-                " . field_names($fields) . "
-            ORDER BY
-                min(`added`)
-        ");
     }
 
     $stmt->execute();
