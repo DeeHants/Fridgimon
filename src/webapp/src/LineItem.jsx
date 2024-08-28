@@ -6,7 +6,7 @@ function LineItem({ item, marker, children, actions }) {
             item.expiry ?
                 item.expired ? "red" :
                     item.days_left < 2 ? "orange" :
-                        item.stored_for > 28 ? "blue" : "green" :
+                        "green" :
                 item.stored_for > 28 ? "blue" : undefined;
     }
     const item_style = marker ? { borderLeftColor: marker } : undefined;
