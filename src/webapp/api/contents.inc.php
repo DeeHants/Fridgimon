@@ -1,22 +1,28 @@
 <?php
 $apis[] = array(
+    # GET /contents
+    # GET /contents/[code]
+    # GET /contents/[type]:[code]
     'key' => 'item',
     'pattern' => 'contents(?:\/(?:([a-zA-Z0-9]+):)?([0-9]+))?',
     'methods' => array("GET"),
     'handler' => "api_contents",
 );
 $apis[] = array(
+    # GET /contents/category/[category]
     'key' => 'category',
     'pattern' => 'contents\/category\/(.+)',
     'methods' => array("GET"),
     'handler' => "api_contents",
 );
 $apis[] = array(
+    # POST /content
     'pattern' => "content",
     'methods' => array("POST"),
     'handler' => "api_contents",
 );
 $apis[] = array(
+    # DELETE /content/[id]
     'pattern' => "content\/([0-9]+)",
     'methods' => array("DELETE"),
     'handler' => "api_contents",

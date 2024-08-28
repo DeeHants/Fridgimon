@@ -1,10 +1,13 @@
 <?php
 $apis[] = array(
+    # GET /item/[code]
+    # GET /item/[type]:[code]
     'pattern' => 'item\/(?:([a-zA-Z0-9]+):)?([0-9]+)',
     'methods' => array("GET"),
     'handler' => "api_item",
 );
 $apis[] = array(
+    # POST /item
     'pattern' => 'item',
     'methods' => array("POST"),
     'handler' => "api_item",

@@ -15,6 +15,7 @@ $path = $_SERVER['PATH_INFO'];
 # API modules
 $apis = array(
     array(
+        # GET /hello
         'pattern' => 'hello',
         'methods' => array("GET"),
         'handler' => "api_hello",
