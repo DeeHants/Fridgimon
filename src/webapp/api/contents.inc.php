@@ -48,7 +48,7 @@ function api_contents($api, $method, $params, $data) {
     );
 
     if ($method == 'POST') {
-        if (!$data['added']) { $data['added'] = date('Y-m-d'); }
+        if (!isset($data['added'])) { $data['added'] = date('Y-m-d'); }
         $stmt = $mysqli->prepare("INSERT INTO `contents` (" . field_names($fields) . ", `container_id`) VALUES (" . field_placeholders($fields) . ", 1)");
         $stmt->bind_param(field_bindtypes($fields), ...field_values($fields, $data));
         $stmt->execute();

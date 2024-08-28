@@ -124,7 +124,7 @@ function decorate_item($row) {
 function decorate_content($row) {
     $current_date = new DateTime(date('Y-m-d'));
     // Check the expiry
-    if ($row['expiry'] != '') {
+    if (isset($row['expiry'])) {
         $expiry_date = new DateTime($row['expiry']);
         $interval = $current_date->diff($expiry_date);
         $days_left = $interval->days * ($interval->invert ? -1 : 1);
