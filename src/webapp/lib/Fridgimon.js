@@ -87,7 +87,7 @@ function Fridgimon(_ref) {
       setScannerResult();
       setFilter({});
     }
-  }, "Clear filter")), scannerResult && /*#__PURE__*/React.createElement(ScannedItem, {
+  }, "Clear filter")), /*#__PURE__*/React.createElement("div", null, scannerResult && /*#__PURE__*/React.createElement(ScannedItem, {
     key: scannerResult.code,
     item: scannerResult,
     onRefresh: function onRefresh(new_item) {
@@ -104,5 +104,9 @@ function Fridgimon(_ref) {
       onRefresh: refreshItems,
       setFilter: setFilter
     });
+  })), eb && scannerResult && !scannerResult.found && items.length == 0 && /*#__PURE__*/React.createElement("div", {
+    style: {
+      height: "250px"
+    }
   }));
 }

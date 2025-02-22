@@ -85,27 +85,35 @@ function Fridgimon({ eb }) {
                 </div >
             )}
 
-            {scannerResult &&
-                <ScannedItem
-                    key={scannerResult.code}
-                    item={scannerResult}
-                    onRefresh={(new_item) => {
-                        if (new_item) {
-                            setScannerResult(new_item);
-                        }
-                        refreshItems();
-                    }}
-                    setFilter={setFilter}
-                />}
+            <div>
+                {scannerResult && (
+                    <ScannedItem
+                        key={scannerResult.code}
+                        item={scannerResult}
+                        onRefresh={(new_item) => {
+                            if (new_item) {
+                                setScannerResult(new_item);
+                            }
+                            refreshItems();
+                        }}
+                        setFilter={setFilter}
+                    />
+                )}
 
-            {items.map(item => (
-                <ExistingItem
-                    key={item.content_id}
-                    item={item}
-                    onRefresh={refreshItems}
-                    setFilter={setFilter}
-                />
-            ))}
+                {items.map(item => (
+                    <ExistingItem
+                        key={item.content_id}
+                        item={item}
+                        onRefresh={refreshItems}
+                        setFilter={setFilter}
+                    />
+                ))}
+            </div>
+
+            {/* EB won't adjust scroll height with the keyboard visible so increase the page height */}
+            {eb && scannerResult && !scannerResult.found && items.length == 0 && (
+                <div style={{ height: "250px" }}></div>
+            )}
         </>
     );
 }
