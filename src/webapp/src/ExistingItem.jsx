@@ -15,27 +15,24 @@ function ExistingItem({ item, onRefresh, setFilter }) {
     }
 
     return (
-        <>
-            <LineItem
-                key={item.content_id}
-                item={item}
-                actions={[
-                    {
-                        caption: "Similar",
-                        onClick: () => {
-                            setFilter({
-                                category: item.category,
-                            });
-                        },
-                        disabled: !item.category,
+        <LineItem
+            key={item.content_id}
+            item={item}
+            actions={[
+                {
+                    caption: "Similar",
+                    onClick: () => {
+                        setFilter({
+                            category: item.category,
+                        });
                     },
-                    {
-                        caption: "Remove",
-                        onClick: () => { deleteContent(item.content_id) }
-                    },
-                ]}
-            />
-
-        </>
+                    disabled: !item.category,
+                },
+                {
+                    caption: "Remove",
+                    onClick: () => { deleteContent(item.content_id) }
+                },
+            ]}
+        />
     );
 }

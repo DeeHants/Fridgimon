@@ -15,7 +15,7 @@ function ExistingItem(_ref) {
       onRefresh();
     });
   }
-  return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(LineItem, {
+  return /*#__PURE__*/React.createElement(LineItem, {
     key: item.content_id,
     item: item,
     actions: [{
@@ -32,5 +32,5 @@ function ExistingItem(_ref) {
         deleteContent(item.content_id);
       }
     }]
-  }));
+  });
 }
