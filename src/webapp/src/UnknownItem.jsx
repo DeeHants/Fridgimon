@@ -1,10 +1,10 @@
 function UnknownItem({ item, onRefresh }) {
     // New item
     const [itemName, setItemName] = React.useState("");
-    const [itemVariant, setItemVariant] = React.useState(null);
     const [itemQualification, setItemQualification] = React.useState(null);
     const [itemQuantity, setItemQuantity] = React.useState(null);
     const [itemSize, setItemSize] = React.useState(null);
+    const [itemVariant, setItemVariant] = React.useState('default');
     const [itemCategory, setItemCategory] = React.useState(null);
     const [itemLife, setItemLife] = React.useState(null);
 
