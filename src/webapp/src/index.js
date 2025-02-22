@@ -15,5 +15,6 @@ function initReactApp() {
     appElement = React.createElement(Fridgimon, {
         eb: appContainer.getAttribute("eb") === "true",
     });
+    // appElement = React.createElement(React.StrictMode, {}, appElement);
     appRoot.render(appElement);
 }
