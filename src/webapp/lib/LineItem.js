@@ -27,7 +27,7 @@ function LineItem(_ref) {
     className: "itemName"
   }, item.quantity > 1 && /*#__PURE__*/React.createElement("span", {
     className: "itemQuantity"
-  }, item.quantity, " of "), item.name || "Unknown", item.variant && /*#__PURE__*/React.createElement("span", {
+  }, item.quantity, " x "), item.name || "Unknown", item.variant && /*#__PURE__*/React.createElement("span", {
     className: "itemVariant"
   }, " (", item.variant, ")")), /*#__PURE__*/React.createElement("div", {
     className: "itemCode"

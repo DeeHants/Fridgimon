@@ -19,6 +19,7 @@ function api_item($api, $method, $params, $data) {
         "code" => "s",
         "code_type" => "s",
         "name" => "s",
+        "quantity" => "i",
         "life" => "i",
         "variant" => "s",
         "category" => "s",

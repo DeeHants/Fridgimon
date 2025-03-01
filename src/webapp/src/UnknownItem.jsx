@@ -9,15 +9,15 @@ function UnknownItem({ item, onRefresh }) {
     const [itemLife, setItemLife] = React.useState(null);
 
     function registerItem() {
-        var name = itemName
+        var name = itemName;
         if (itemQualification) { name += ' - ' + itemQualification }
-        if (itemQuantity) { name += ' x ' + itemQuantity }
         if (itemSize) { name += ' - ' + itemSize }
         api_register_new_item(
             {
                 code: item.code,
                 code_type: item.code_type,
                 name: name,
+                quantity: itemQuantity,
                 variant: itemVariant,
                 category: itemCategory,
                 life: itemLife,
@@ -64,7 +64,6 @@ function UnknownItem({ item, onRefresh }) {
                 <input
                     type="number"
                     value={itemQuantity}
-                    disabled={itemSize != null}
                     onChange={e => setItemQuantity(e.target.value || null)}
                 />
             </div>
@@ -73,7 +72,6 @@ function UnknownItem({ item, onRefresh }) {
                 <input
                     type="text"
                     value={itemSize}
-                    disabled={itemQuantity != null}
                     onChange={e => setItemSize(e.target.value || null)}
                 />
             </div>

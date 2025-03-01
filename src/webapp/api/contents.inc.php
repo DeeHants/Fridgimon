@@ -112,7 +112,7 @@ function api_contents($api, $method, $params, $data) {
 
     // Lookup the contents
     $stmt = $mysqli->prepare("SELECT
-            count(*) as `quantity`,
+            count(*) * IFNULL(`items`.`quantity`, 1) as `quantity`,
             `content_id`,
             " . field_names($fields, "contents") . ",
             " . field_names($item_fields, "items") . ",

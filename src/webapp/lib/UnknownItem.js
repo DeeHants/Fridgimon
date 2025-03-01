@@ -43,9 +43,6 @@ function UnknownItem(_ref) {
     if (itemQualification) {
       name += ' - ' + itemQualification;
     }
-    if (itemQuantity) {
-      name += ' x ' + itemQuantity;
-    }
     if (itemSize) {
       name += ' - ' + itemSize;
     }
@@ -53,6 +50,7 @@ function UnknownItem(_ref) {
       code: item.code,
       code_type: item.code_type,
       name: name,
+      quantity: itemQuantity,
       variant: itemVariant,
       category: itemCategory,
       life: itemLife
@@ -92,7 +90,6 @@ function UnknownItem(_ref) {
   }, /*#__PURE__*/React.createElement("label", null, "Quantity"), /*#__PURE__*/React.createElement("input", {
     type: "number",
     value: itemQuantity,
-    disabled: itemSize != null,
     onChange: function onChange(e) {
       return setItemQuantity(e.target.value || null);
     }
@@ -101,7 +98,6 @@ function UnknownItem(_ref) {
   }, /*#__PURE__*/React.createElement("label", null, "Size"), /*#__PURE__*/React.createElement("input", {
     type: "text",
     value: itemSize,
-    disabled: itemQuantity != null,
     onChange: function onChange(e) {
       return setItemSize(e.target.value || null);
     }

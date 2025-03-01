@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 27, 2024 at 08:14 PM
+-- Generation Time: Mar 01, 2025 at 10:05 PM
 -- Server version: 10.3.28-MariaDB
 -- PHP Version: 7.2.24
 
@@ -75,6 +75,7 @@ CREATE TABLE `items` (
   `code` varchar(50) DEFAULT NULL,
   `code_type` varchar(20) DEFAULT NULL,
   `name` text NOT NULL,
+  `quantity` int(11) DEFAULT NULL,
   `variant` text DEFAULT NULL,
   `category` text DEFAULT NULL,
   `life` int(11) DEFAULT NULL,
