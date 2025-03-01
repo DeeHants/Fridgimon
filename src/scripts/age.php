@@ -27,6 +27,8 @@ while($item = $item_result->fetch_assoc()) {
 
     // Get the ages of the past contents
     $ages = $item['ages'] ? explode(",", $item['ages']) : array();
+    $item_count = 0;
+    $total_age = 0;
 
     // And now any current (an unchecked) items
     while($content = $content_result->fetch_assoc()) {
