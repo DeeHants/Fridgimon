@@ -53,7 +53,8 @@ CREATE TABLE `contents` (
   `container_id` int(11) NOT NULL,
   `added` date NOT NULL DEFAULT current_timestamp(),
   `expiry` date DEFAULT NULL,
-  `age_checked` tinyint(1) NOT NULL DEFAULT 0
+  `age_checked` tinyint(1) NOT NULL DEFAULT 0,
+  `used` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

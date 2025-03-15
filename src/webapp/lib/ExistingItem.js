@@ -4,9 +4,10 @@ function ExistingItem(_ref) {
   var item = _ref.item,
     onRefresh = _ref.onRefresh,
     setFilter = _ref.setFilter;
-  function deleteContent(content_id) {
-    api_remove_content({
-      content_id: content_id
+  function useContent(content_id) {
+    api_use_content({
+      content_id: content_id,
+      quantity: 1
     }, function (data, error) {
       if (!data) {
         setError("Unable to remove contents, " + error);
@@ -27,9 +28,9 @@ function ExistingItem(_ref) {
       },
       disabled: !item.category
     }, {
-      caption: "Remove",
+      caption: "Use",
       onClick: function onClick() {
-        deleteContent(item.content_id);
+        useContent(item.content_id);
       }
     }]
   });

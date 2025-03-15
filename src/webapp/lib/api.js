@@ -23,6 +23,10 @@ function api_register_new_item(item, onComplete) {
 function api_store_new_content(content, onComplete) {
   api_call('POST', "content", content, onComplete);
 }
+function api_use_content(content, onComplete) {
+  var call = "content/" + content['content_id'] + "/used";
+  api_call('PUT', call, content, onComplete);
+}
 function api_remove_content(content, onComplete) {
   var call = "content/" + content['content_id'];
   api_call('DELETE', call, undefined, onComplete);

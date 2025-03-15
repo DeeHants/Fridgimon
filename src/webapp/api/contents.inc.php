@@ -22,6 +22,13 @@ $apis[] = array(
     'handler' => "api_contents",
 );
 $apis[] = array(
+    # PUT /content/[id]/used
+    'key' => 'used',
+    'pattern' => "content\/([0-9]+)\/used",
+    'methods' => array("PUT"),
+    'handler' => "api_contents",
+);
+$apis[] = array(
     # DELETE /content/[id]
     'pattern' => "content\/([0-9]+)",
     'methods' => array("DELETE"),
@@ -34,6 +41,7 @@ function api_contents($api, $method, $params, $data) {
         "item_id" => "i",
         "added" => "s",
         "expiry" => "s",
+        "used" => "i",
     );
     $item_fields = array(
         "code" => "s",
@@ -56,6 +64,43 @@ function api_contents($api, $method, $params, $data) {
 
         // Get the last ID for the lookup
         $item_id = $mysqli->insert_id;
+
+    } elseif ($method == 'PUT' && $api['key'] == "used") {
+        // Get the existing item ID
+        $stmt = $mysqli->prepare("SELECT `content_id`, `contents`.`item_id`, `used`, `quantity` FROM `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id` WHERE `content_id` = ?");
+        $stmt->bind_param("i",
+            $params[1]
+        );
+        $stmt->execute();
+        if ($mysqli->error) { return api_error($mysqli->error); }
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $item_id = $row['item_id'];
+        }
+
+        $used = $data['quantity']; # Used this time
+        $used_already = $row['used']; # Used before
+        $used_now = $used_already + $used; # Used now
+        $item_quantity = $row['quantity'];
+
+        if ($used_now < $item_quantity) {
+            // Update the item
+            $stmt = $mysqli->prepare("UPDATE `contents` SET `used` = ? WHERE `content_id` = ?");
+            $stmt->bind_param("ii",
+                $used_now,
+                $params[1]
+            );
+            $stmt->execute();
+            if ($mysqli->error) { return api_error($mysqli->error); }
+        } else {
+            // Delete the item
+            $stmt = $mysqli->prepare("DELETE FROM `contents` WHERE `content_id` = ?");
+            $stmt->bind_param("i",
+                $params[1]
+            );
+            $stmt->execute();
+            if ($mysqli->error) { return api_error($mysqli->error); }
+        }
 
     } elseif ($method == 'DELETE') {
         // Get the existing item ID
@@ -112,7 +157,7 @@ function api_contents($api, $method, $params, $data) {
 
     // Lookup the contents
     $stmt = $mysqli->prepare("SELECT
-            count(*) * IFNULL(`items`.`quantity`, 1) as `quantity`,
+            (count(*) * IFNULL(`items`.`quantity`, 1)) - sum(`used`) as `quantity`,
             `content_id`,
             " . field_names($fields, "contents") . ",
             " . field_names($item_fields, "items") . ",

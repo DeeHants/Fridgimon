@@ -1,8 +1,9 @@
 function ExistingItem({ item, onRefresh, setFilter }) {
-    function deleteContent(content_id) {
-        api_remove_content(
+    function useContent(content_id) {
+        api_use_content(
             {
                 content_id: content_id,
+                quantity: 1,
             },
             function (data, error) {
                 if (!data) {
@@ -29,8 +30,8 @@ function ExistingItem({ item, onRefresh, setFilter }) {
                     disabled: !item.category,
                 },
                 {
-                    caption: "Remove",
-                    onClick: () => { deleteContent(item.content_id) }
+                    caption: "Use",
+                    onClick: () => { useContent(item.content_id) }
                 },
             ]}
         />
