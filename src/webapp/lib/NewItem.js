@@ -28,20 +28,6 @@ function NewItem(_ref) {
     expiryValue = _React$useState2[0],
     setExpiryValue = _React$useState2[1];
   var expiry_date_element = React.useRef(null);
-  function storeItem() {
-    var content = {
-      item_id: item.item_id
-    };
-    if (item.expires) {
-      content['expiry'] = expiryValue;
-    }
-    api_store_new_content(content, function (data, error) {
-      if (!data) {
-        setError("Unable to store item contents, " + error);
-      }
-      onRefresh();
-    });
-  }
   return /*#__PURE__*/React.createElement(LineItem, {
     item: item,
     marker: "lightgrey",
@@ -54,7 +40,20 @@ function NewItem(_ref) {
       }
     }, {
       caption: "Store",
-      onClick: storeItem
+      onClick: function onClick() {
+        var content = {
+          item_id: item.item_id
+        };
+        if (item.expires) {
+          content['expiry'] = expiryValue;
+        }
+        api_store_new_content(content, function (data, error) {
+          if (!data) {
+            setError("Unable to store item contents, " + error);
+          }
+          onRefresh();
+        });
+      }
     }]
   }, item.expires && /*#__PURE__*/React.createElement("div", {
     className: "itemExpiryEntry"

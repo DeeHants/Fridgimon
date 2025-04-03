@@ -16,23 +16,6 @@ function NewItem({ item, onRefresh, setFilter }) {
     const [expiryValue, setExpiryValue] = React.useState(expiry_date_string);
     const expiry_date_element = React.useRef(null);
 
-    function storeItem() {
-        var content = {
-            item_id: item.item_id,
-        };
-        if (item.expires) { content['expiry'] = expiryValue; }
-
-        api_store_new_content(
-            content,
-            function (data, error) {
-                if (!data) {
-                    setError("Unable to store item contents, " + error);
-                }
-                onRefresh();
-            }
-        );
-    }
-
     return (
         <LineItem
             item={item}
@@ -48,7 +31,22 @@ function NewItem({ item, onRefresh, setFilter }) {
                 },
                 {
                     caption: "Store",
-                    onClick: storeItem
+                    onClick: () => {
+                        var content = {
+                            item_id: item.item_id,
+                        };
+                        if (item.expires) { content['expiry'] = expiryValue; }
+
+                        api_store_new_content(
+                            content,
+                            function (data, error) {
+                                if (!data) {
+                                    setError("Unable to store item contents, " + error);
+                                }
+                                onRefresh();
+                            }
+                        );
+                    }
                 }
             ]}
         >

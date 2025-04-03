@@ -1,20 +1,4 @@
 function ExistingItem({ item, onRefresh, setFilter }) {
-    function useContent(content_id) {
-        api_use_content(
-            {
-                content_id: content_id,
-                quantity: 1,
-            },
-            function (data, error) {
-                if (!data) {
-                    setError("Unable to remove contents, " + error);
-                    data = []
-                }
-                onRefresh();
-            }
-        );
-    }
-
     return (
         <LineItem
             key={item.content_id}
@@ -31,7 +15,21 @@ function ExistingItem({ item, onRefresh, setFilter }) {
                 },
                 {
                     caption: "Use",
-                    onClick: () => { useContent(item.content_id) }
+                    onClick: () => {
+                        api_use_content(
+                            {
+                                content_id: content_id,
+                                quantity: 1,
+                            },
+                            function (data, error) {
+                                if (!data) {
+                                    setError("Unable to remove contents, " + error);
+                                    data = []
+                                }
+                                onRefresh();
+                            }
+                        );
+                    },
                 },
                 ...(item.quantity > 1 && item.item_quantity > 1) ? [{
                     caption: "Use pack",
