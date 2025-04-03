@@ -26,7 +26,7 @@ function UnknownItem(_ref) {
     _React$useState8 = _slicedToArray(_React$useState7, 2),
     itemSize = _React$useState8[0],
     setItemSize = _React$useState8[1];
-  var _React$useState9 = React.useState('default'),
+  var _React$useState9 = React.useState(''),
     _React$useState10 = _slicedToArray(_React$useState9, 2),
     itemVariant = _React$useState10[0],
     setItemVariant = _React$useState10[1];
