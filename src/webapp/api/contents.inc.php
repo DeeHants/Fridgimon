@@ -161,6 +161,7 @@ function api_contents($api, $method, $params, $data) {
             `content_id`,
             " . field_names($fields, "contents") . ",
             " . field_names($item_fields, "items") . ",
+            IFNULL(`items`.`quantity`, 1) as `item_quantity`,
             `container_id` as `container`
         FROM
             `contents` LEFT JOIN `items` ON `contents`.`item_id` = `items`.`item_id`

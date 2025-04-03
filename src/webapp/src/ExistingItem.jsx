@@ -33,6 +33,23 @@ function ExistingItem({ item, onRefresh, setFilter }) {
                     caption: "Use",
                     onClick: () => { useContent(item.content_id) }
                 },
+                ...(item.quantity > 1 && item.item_quantity > 1) ? [{
+                    caption: "Use pack",
+                    onClick: () => {
+                        api_remove_content(
+                            {
+                                content_id: item.content_id,
+                            },
+                            function (data, error) {
+                                if (!data) {
+                                    setError("Unable to remove contents, " + error);
+                                    data = []
+                                }
+                                onRefresh();
+                            }
+                        );
+                    },
+                }] : [],
             ]}
         />
     );
