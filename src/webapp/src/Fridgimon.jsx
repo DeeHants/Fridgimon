@@ -53,10 +53,40 @@ function Fridgimon({ eb }) {
                     setError("Unable to get contents, " + error);
                     data = []
                 }
+
+                data.sort(sortFunc);
                 setItems(data);
                 setBusy(false);
             }
         );
+    }
+
+    // Sorting
+    const sortOptions = [
+        'expiry',
+        'name',
+        'added',
+    ]
+    const [sortOrder, setSortOrder] = React.useState(sortOptions[0]);
+
+    React.useEffect(() => {
+        sortItems();
+    }, [sortOrder]);
+
+    function sortItems() {
+        var newItems = [...items]
+        newItems.sort(sortFunc);
+        setItems(newItems);
+    }
+
+    function sortFunc(a, b) {
+        a = a[sortOrder];
+        b = b[sortOrder];
+
+        if (a === null && b == null) { return 0 }
+        else if (a === null) { return 1 }
+        else if (b === null) { return -1 }
+        else { return a.localeCompare(b); }
     }
 
     return (
@@ -84,6 +114,18 @@ function Fridgimon({ eb }) {
                     }}>Clear filter</button>
                 </div >
             )}
+
+            <div>
+                {sortOrder == "expiry" && (
+                    <button onClick={() => { setSortOrder("name"); }}>Sort by name</button>
+                )}
+                {sortOrder == "name" && (
+                    <button onClick={() => { setSortOrder("added"); }}>Sort by added</button>
+                )}
+                {sortOrder == "added" && (
+                    <button onClick={() => { setSortOrder("expiry"); }}>Sort by expiry</button>
+                )}
+            </div>
 
             <div>
                 {scannerResult && (

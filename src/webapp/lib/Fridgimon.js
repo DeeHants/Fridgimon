@@ -1,5 +1,9 @@
 "use strict";
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -68,9 +72,38 @@ function Fridgimon(_ref) {
         setError("Unable to get contents, " + error);
         data = [];
       }
+      data.sort(sortFunc);
       setItems(data);
       setBusy(false);
     });
+  }
+
+  // Sorting
+  var sortOptions = ['expiry', 'name', 'added'];
+  var _React$useState11 = React.useState(sortOptions[0]),
+    _React$useState12 = _slicedToArray(_React$useState11, 2),
+    sortOrder = _React$useState12[0],
+    setSortOrder = _React$useState12[1];
+  React.useEffect(function () {
+    sortItems();
+  }, [sortOrder]);
+  function sortItems() {
+    var newItems = _toConsumableArray(items);
+    newItems.sort(sortFunc);
+    setItems(newItems);
+  }
+  function sortFunc(a, b) {
+    a = a[sortOrder];
+    b = b[sortOrder];
+    if (a === null && b == null) {
+      return 0;
+    } else if (a === null) {
+      return 1;
+    } else if (b === null) {
+      return -1;
+    } else {
+      return a.localeCompare(b);
+    }
   }
   return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement(Busy, {
     isBusy: isBusy
@@ -87,7 +120,19 @@ function Fridgimon(_ref) {
       setScannerResult();
       setFilter({});
     }
-  }, "Clear filter")), /*#__PURE__*/React.createElement("div", null, scannerResult && /*#__PURE__*/React.createElement(ScannedItem, {
+  }, "Clear filter")), /*#__PURE__*/React.createElement("div", null, sortOrder == "expiry" && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      setSortOrder("name");
+    }
+  }, "Sort by name"), sortOrder == "name" && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      setSortOrder("added");
+    }
+  }, "Sort by added"), sortOrder == "added" && /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick() {
+      setSortOrder("expiry");
+    }
+  }, "Sort by expiry")), /*#__PURE__*/React.createElement("div", null, scannerResult && /*#__PURE__*/React.createElement(ScannedItem, {
     key: scannerResult.code,
     item: scannerResult,
     onRefresh: function onRefresh(new_item) {
