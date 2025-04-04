@@ -115,12 +115,14 @@ function Fridgimon(_ref) {
     onDismiss: function onDismiss() {
       setError("");
     }
-  }), (scannerResult || filter.code || filter.category) && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "buttonbar"
+  }, (scannerResult || filter.code || filter.category) && /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
       setScannerResult();
       setFilter({});
     }
-  }, "Clear filter")), /*#__PURE__*/React.createElement("div", null, sortOrder == "expiry" && /*#__PURE__*/React.createElement("button", {
+  }, "Clear filter"), sortOrder == "expiry" && /*#__PURE__*/React.createElement("button", {
     onClick: function onClick() {
       setSortOrder("name");
     }

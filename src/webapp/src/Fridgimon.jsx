@@ -106,16 +106,14 @@ function Fridgimon({ eb }) {
                 }}
             />
 
-            {(scannerResult || filter.code || filter.category) && (
-                <div>
+            <div className="buttonbar">
+                {(scannerResult || filter.code || filter.category) && (
                     <button onClick={() => {
                         setScannerResult();
                         setFilter({});
                     }}>Clear filter</button>
-                </div >
-            )}
+                )}
 
-            <div>
                 {sortOrder == "expiry" && (
                     <button onClick={() => { setSortOrder("name"); }}>Sort by name</button>
                 )}
