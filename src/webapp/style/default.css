@@ -3,6 +3,14 @@ body {
     font-family: sans-serif;
 }
 
+button {
+    height: 25px;
+}
+
+.buttonbar {
+    margin-bottom: 5px;
+}
+
 .buttonbar button {
     margin-right: 5px;
 }
@@ -35,8 +43,7 @@ body {
 
 .item .itemActions .itemAction {
     display: block;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin: 5px 0 5px auto;
 }
 
 .item .itemEntry {
