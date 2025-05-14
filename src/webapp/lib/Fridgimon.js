@@ -134,7 +134,7 @@ function Fridgimon(_ref) {
     onClick: function onClick() {
       setSortOrder("expiry");
     }
-  }, "Sort by expiry")), /*#__PURE__*/React.createElement("div", null, scannerResult && /*#__PURE__*/React.createElement(ScannedItem, {
+  }, "Sort by expiry"), eb && /*#__PURE__*/React.createElement(UnlockButton, null)), /*#__PURE__*/React.createElement("div", null, scannerResult && /*#__PURE__*/React.createElement(ScannedItem, {
     key: scannerResult.code,
     item: scannerResult,
     onRefresh: function onRefresh(new_item) {

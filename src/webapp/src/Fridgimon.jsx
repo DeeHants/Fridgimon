@@ -123,6 +123,8 @@ function Fridgimon({ eb }) {
                 {sortOrder == "added" && (
                     <button onClick={() => { setSortOrder("expiry"); }}>Sort by expiry</button>
                 )}
+
+                {eb && (<UnlockButton />)}
             </div>
 
             <div>
