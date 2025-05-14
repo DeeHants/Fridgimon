@@ -13,6 +13,7 @@ button {
 
 .buttonbar button {
     margin-right: 5px;
+    height: 40px;
 }
 
 .item {
