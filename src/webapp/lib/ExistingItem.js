@@ -25,7 +25,7 @@ function ExistingItem(_ref) {
       caption: "Use",
       onClick: function onClick() {
         api_use_content({
-          content_id: content_id,
+          content_id: item.content_id,
           quantity: 1
         }, function (data, error) {
           if (!data) {

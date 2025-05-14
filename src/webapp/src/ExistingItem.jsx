@@ -18,7 +18,7 @@ function ExistingItem({ item, onRefresh, setFilter }) {
                     onClick: () => {
                         api_use_content(
                             {
-                                content_id: content_id,
+                                content_id: item.content_id,
                                 quantity: 1,
                             },
                             function (data, error) {
