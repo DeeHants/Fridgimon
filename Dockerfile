@@ -20,6 +20,7 @@ RUN a2enmod rewrite
 
 # Copy project files
 COPY ./src/webapp/ /var/www/html/
+COPY ./src/webapp/db.docker.inc.php /var/www/html/db.inc.php
 
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html

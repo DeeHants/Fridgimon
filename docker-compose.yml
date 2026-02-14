@@ -15,7 +15,7 @@ services:
       - "80:80"
     volumes:
       - ./src/webapp:/var/www/html
-      - ./src/webapp/db.inc.php:/var/www/html/db.inc.php
+      - ./src/webapp/db.docker.inc.php:/var/www/html/db.inc.php
     depends_on:
       - mariadb
     networks:
