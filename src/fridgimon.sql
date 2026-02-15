@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Mar 01, 2025 at 10:05 PM
+-- Generation Time: Feb 15, 2026 at 12:37 PM
 -- Server version: 10.3.28-MariaDB
 -- PHP Version: 7.2.24
 
@@ -54,7 +54,7 @@ CREATE TABLE `contents` (
   `added` date NOT NULL DEFAULT current_timestamp(),
   `expiry` date DEFAULT NULL,
   `age_checked` tinyint(1) NOT NULL DEFAULT 0,
-  `used` int(11) NOT NULL DEFAULT 0
+  `used` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

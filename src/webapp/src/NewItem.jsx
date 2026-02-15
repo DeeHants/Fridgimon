@@ -36,6 +36,7 @@ function NewItem({ item, onRefresh, setFilter }) {
                             item_id: item.item_id,
                         };
                         if (item.expires) { content['expiry'] = expiryValue; }
+                        if (item.quantity > 1) { content['used'] = 0; }
 
                         api_store_new_content(
                             content,
