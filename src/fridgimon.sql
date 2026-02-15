@@ -41,6 +41,13 @@ CREATE TABLE `containers` (
 --       `users` -> `user_id`
 --
 
+--
+-- Dumping data for table `containers`
+--
+
+INSERT INTO `containers` (`container_id`, `user_id`, `name`) VALUES
+(1, 1, 'Fridge');
+
 -- --------------------------------------------------------
 
 --
@@ -102,6 +109,13 @@ CREATE TABLE `users` (
 --
 -- RELATIONSHIPS FOR TABLE `users`:
 --
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `name`, `email`) VALUES
+(1, 'User', 'user@example.com');
 
 --
 -- Indexes for dumped tables
