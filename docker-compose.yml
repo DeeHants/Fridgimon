@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fridgimon-app
+    environment:
+      DB_HOST: mariadb
+      DB_USER: fridgimon
+      DB_PASSWORD: hunter2
+      DB_NAME: fridgimon
+    ports:
+      - "80:80"
+    volumes:
+      - ./src/webapp:/var/www/html
+      - ./src/webapp/db.docker.inc.php:/var/www/html/db.inc.php
+    depends_on:
+      - mariadb
+    networks:
+      - fridgimon_network
+
+  mariadb:
+    image: mariadb:10.3
+    container_name: fridgimon-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root_hunter2
+      MYSQL_DATABASE: fridgimon
+      MYSQL_USER: fridgimon
+      MYSQL_PASSWORD: hunter2
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./src/fridgimon.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    networks:
+      - fridgimon_network
+
+volumes:
+  mariadb_data:
+
+networks:
+  fridgimon_network:
+    driver: bridge
