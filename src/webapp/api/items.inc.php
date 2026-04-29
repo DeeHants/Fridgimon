@@ -5,6 +5,7 @@ $apis[] = array(
     'pattern' => 'item\/(?:([a-zA-Z0-9]+):)?([0-9]+)',
     'methods' => array("GET"),
     'handler' => "api_item",
+    'allow_anonymous' => true,
 );
 $apis[] = array(
     # POST /item

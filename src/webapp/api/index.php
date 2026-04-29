@@ -21,8 +21,16 @@ $apis = array(
         'handler' => "api_hello",
     ),
 );
+require("session.inc.php");
 require("items.inc.php");
 require("contents.inc.php");
+
+// Read the auth details and determine the user, if any
+if(isset($_SERVER['HTTP_AUTHORIZATION'])) {
+    $user_id = verify_session();
+} else {
+    $user_id = null;
+}
 
 // Check for the API
 $api_found = false;
@@ -33,6 +41,13 @@ foreach ($apis as $api) {
         continue;
     }
     $api_found = true;
+
+    // Check authentication if required
+    if ((($api['allow_anonymous'] ?? false) === false) && !$user_id) {
+        $status = 401;
+        $error = "This API requires authentication";
+        break;
+    }
 
     // Supported methods
     if (array_search($method, $api['methods']) === false) {
