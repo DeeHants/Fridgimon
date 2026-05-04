@@ -229,6 +229,19 @@
                 "items": {
                     "$ref": "#/components/schemas/ContentItem"
                 }
+            },
+            "ContentUseRequest": {
+                "type": "object",
+                "properties": {
+                    "quantity": {
+                        "type": "integer",
+                        "description": "Quantity to mark as used for the content item. Must be a positive integer and cannot exceed the available quantity of the content.",
+                        "example": 2
+                    }
+                },
+                "required": [
+                    "quantity"
+                ]
             }
         }
     },
@@ -315,6 +328,108 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/content": {
+            "post": {
+                "summary": "Add an item to contents",
+                "tags": [
+                    "Contents"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Content"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated contents list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItemsResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/content/{content_id}/used": {
+            "put": {
+                "summary": "Mark quantity used for a content item",
+                "tags": [
+                    "Contents"
+                ],
+                "parameters": [
+                    {
+                        "name": "content_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the content entry to mark as used."
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContentUseRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated contents list after use",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItemsResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/content/{content_id}": {
+            "delete": {
+                "summary": "Delete a content item",
+                "tags": [
+                    "Contents"
+                ],
+                "parameters": [
+                    {
+                        "name": "content_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the content entry to delete."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated contents list after deletion",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItemsResponse"
                                 }
                             }
                         }
