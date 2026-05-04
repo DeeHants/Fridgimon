@@ -19,6 +19,7 @@ $apis = array(
         'pattern' => 'hello',
         'methods' => array("GET"),
         'handler' => "api_hello",
+        'allow_anonymous' => true,
     ),
 );
 require("session.inc.php");

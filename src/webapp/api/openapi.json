@@ -313,6 +313,7 @@
                 "tags": [
                     "Utility"
                 ],
+                "security": [],
                 "responses": {
                     "200": {
                         "description": "Hello response",
