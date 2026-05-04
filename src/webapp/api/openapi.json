@@ -1,0 +1,523 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Fridgimon API",
+        "version": "1.0.0",
+        "summary": "Documentation for the Fridgimon backend API.",
+        "contact": {
+            "name": "Fridgimon",
+            "url": "https://github.com/DeeHants/Fridgimon"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://fridge.doesnotcompute.co.uk/api/",
+            "description": "Fridgimon demo instance"
+        },
+        {
+            "url": "http://localhost:80/api/",
+            "description": "Local docker instance"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "ErrorResponse": {
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "string",
+                        "description": "Error message describing the issue."
+                    }
+                },
+                "required": [
+                    "error"
+                ]
+            },
+            "Item": {
+                "type": "object",
+                "properties": {
+                    "item_id": {
+                        "type": "integer",
+                        "description": "Unique numeric ID for the item.",
+                        "readOnly": true,
+                        "example": 2
+                    },
+                    "code": {
+                        "type": "string",
+                        "description": "Item code, such as a barcode number or other identifier.",
+                        "example": "5000128104517"
+                    },
+                    "code_type": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "Type of the item code, such as 'EAN13' for barcodes. May be null if code type is unknown.",
+                        "example": "EAN13"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name or description of the item.",
+                        "example": "Whole milk - 4 pints"
+                    },
+                    "quantity": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "description": "Quantity of the item, such as number of units. May be null if only a single item or is weight or volume based.",
+                        "default": "1"
+                    },
+                    "variant": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "Variant or additional description of the item, such as brand or packaging details. May be null if not applicable.",
+                        "example": "Co-op"
+                    },
+                    "category": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "Category of the item, such as 'milk' or 'vegetables'. May be null if not categorized.",
+                        "example": "milk"
+                    },
+                    "life": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "description": "Typical shelf life of the item in days. Used as a default for expiry calculations when adding to contents. May be null if the item does not expire.",
+                        "example": 10
+                    },
+                    "expires": {
+                        "type": "boolean",
+                        "description": "Indicates whether the item is perishable and has an expiry date.",
+                        "readOnly": true,
+                        "example": true
+                    }
+                },
+                "required": [
+                    "item_id",
+                    "code",
+                    "name",
+                    "life"
+                ]
+            },
+            "ItemResponse": {
+                "allOf": [
+                    {
+                        "type": "object",
+                        "properties": {
+                            "found": {
+                                "type": "boolean",
+                                "description": "Indicates whether the item was found in the database.",
+                                "readOnly": true
+                            }
+                        },
+                        "required": [
+                            "found"
+                        ]
+                    },
+                    {
+                        "$ref": "#/components/schemas/Item"
+                    }
+                ]
+            },
+            "Content": {
+                "type": "object",
+                "properties": {
+                    "content_id": {
+                        "type": "integer",
+                        "description": "Unique numeric ID for the content.",
+                        "readOnly": true,
+                        "example": 456
+                    },
+                    "item_id": {
+                        "type": "integer",
+                        "description": "Numeric ID of the associated item.",
+                        "example": 2
+                    },
+                    "added": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date",
+                        "description": "Date when the content was added, in YYYY-MM-DD format. May be null to use the current date as default."
+                    },
+                    "expiry": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "Date when the content expires, in YYYY-MM-DD format. May be null if the item does not expire.",
+                        "format": "date"
+                    },
+                    "used": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "description": "Quantity of the content that has been marked as used. Initially 0 when adding new content.",
+                        "default": 0
+                    },
+                    "days_left": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "description": "Number of days left until expiry, calculated as (expiry date - current date). May be null if the item does not expire or expiry date is not set.",
+                        "readOnly": true,
+                        "example": 5
+                    },
+                    "expired": {
+                        "type": [
+                            "boolean",
+                            "null"
+                        ],
+                        "description": "Indicates whether the content is expired, calculated as (current date > expiry date). May be false if the item does not expire or expiry date is not set.",
+                        "readOnly": true,
+                        "example": false
+                    },
+                    "stored_for": {
+                        "type": "integer",
+                        "description": "Number of days the content has been stored since it was added, calculated as (current date - added date).",
+                        "readOnly": true,
+                        "example": 2
+                    }
+                },
+                "required": [
+                    "content_id",
+                    "item_id"
+                ]
+            },
+            "ContentItem": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Content"
+                    },
+                    {
+                        "$ref": "#/components/schemas/Item"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "quantity": {
+                                "type": "integer",
+                                "description": "Total quantity of the item, derived from item quantity and content used. Calculated as (item quantity or 1) - used.",
+                                "readOnly": true,
+                                "example": 10
+                            },
+                            "item_quantity": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ],
+                                "description": "Quantity of the original item, such as number of units. May be null if only a single item or is weight or volume based.",
+                                "readOnly": true,
+                                "example": 5
+                            }
+                        }
+                    }
+                ]
+            },
+            "ContentItemsResponse": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/ContentItem"
+                }
+            },
+            "ContentUseRequest": {
+                "type": "object",
+                "properties": {
+                    "quantity": {
+                        "type": "integer",
+                        "description": "Quantity to mark as used for the content item. Must be a positive integer and cannot exceed the available quantity of the content.",
+                        "example": 2
+                    }
+                },
+                "required": [
+                    "quantity"
+                ]
+            }
+        }
+    },
+    "paths": {
+        "/hello": {
+            "get": {
+                "summary": "Get a simple hello response",
+                "tags": [
+                    "Utility"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hello response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "hello": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "hello"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/item": {
+            "post": {
+                "summary": "Register a new item",
+                "tags": [
+                    "Item"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Item"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Item registered successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/item/{code}": {
+            "get": {
+                "summary": "Lookup an item by ID, code, or type:code",
+                "tags": [
+                    "Item"
+                ],
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Numeric item ID, plain code, or type-prefixed code (for example 'EAN13:5000128104517')."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item lookup response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/content": {
+            "post": {
+                "summary": "Add an item to contents",
+                "tags": [
+                    "Contents"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Content"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated contents list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItemsResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/content/{content_id}/used": {
+            "put": {
+                "summary": "Mark quantity used for a content item",
+                "tags": [
+                    "Contents"
+                ],
+                "parameters": [
+                    {
+                        "name": "content_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the content entry to mark as used."
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ContentUseRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Updated contents list after use",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItemsResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/content/{content_id}": {
+            "delete": {
+                "summary": "Delete a content item",
+                "tags": [
+                    "Contents"
+                ],
+                "parameters": [
+                    {
+                        "name": "content_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID of the content entry to delete."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated contents list after deletion",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItemsResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contents": {
+            "get": {
+                "summary": "List contents",
+                "tags": [
+                    "Contents"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of contents",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItemsResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contents/{code}": {
+            "get": {
+                "summary": "List contents filtered by item identifier or code",
+                "tags": [
+                    "Contents"
+                ],
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Item ID or item code. Numeric values up to 999999 are treated as item IDs; other values may be plain codes or type-prefixed codes."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Filtered contents list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItemsResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contents/category/{category}": {
+            "get": {
+                "summary": "List contents by item category",
+                "tags": [
+                    "Contents"
+                ],
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Category name used to filter contents."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Contents list filtered by category",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItemsResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
