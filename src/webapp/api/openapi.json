@@ -1,0 +1,68 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Fridgimon API",
+        "version": "1.0.0",
+        "summary": "Documentation for the Fridgimon backend API.",
+        "contact": {
+            "name": "Fridgimon",
+            "url": "https://github.com/DeeHants/Fridgimon"
+        }
+    },
+    "servers": [
+        {
+            "url": "https://fridge.doesnotcompute.co.uk/api/",
+            "description": "Fridgimon demo instance"
+        },
+        {
+            "url": "http://localhost:80/api/",
+            "description": "Local docker instance"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "ErrorResponse": {
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "string",
+                        "description": "Error message describing the issue."
+                    }
+                },
+                "required": [
+                    "error"
+                ]
+            }
+        }
+    },
+    "paths": {
+        "/hello": {
+            "get": {
+                "summary": "Get a simple hello response",
+                "tags": [
+                    "Utility"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hello response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "hello": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "hello"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
