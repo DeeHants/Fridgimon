@@ -125,6 +125,110 @@
                         "$ref": "#/components/schemas/Item"
                     }
                 ]
+            },
+            "Content": {
+                "type": "object",
+                "properties": {
+                    "content_id": {
+                        "type": "integer",
+                        "description": "Unique numeric ID for the content.",
+                        "readOnly": true,
+                        "example": 456
+                    },
+                    "item_id": {
+                        "type": "integer",
+                        "description": "Numeric ID of the associated item.",
+                        "example": 2
+                    },
+                    "added": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date",
+                        "description": "Date when the content was added, in YYYY-MM-DD format. May be null to use the current date as default."
+                    },
+                    "expiry": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "Date when the content expires, in YYYY-MM-DD format. May be null if the item does not expire.",
+                        "format": "date"
+                    },
+                    "used": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "description": "Quantity of the content that has been marked as used. Initially 0 when adding new content.",
+                        "default": 0
+                    },
+                    "days_left": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "description": "Number of days left until expiry, calculated as (expiry date - current date). May be null if the item does not expire or expiry date is not set.",
+                        "readOnly": true,
+                        "example": 5
+                    },
+                    "expired": {
+                        "type": [
+                            "boolean",
+                            "null"
+                        ],
+                        "description": "Indicates whether the content is expired, calculated as (current date > expiry date). May be false if the item does not expire or expiry date is not set.",
+                        "readOnly": true,
+                        "example": false
+                    },
+                    "stored_for": {
+                        "type": "integer",
+                        "description": "Number of days the content has been stored since it was added, calculated as (current date - added date).",
+                        "readOnly": true,
+                        "example": 2
+                    }
+                },
+                "required": [
+                    "content_id",
+                    "item_id"
+                ]
+            },
+            "ContentItem": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Content"
+                    },
+                    {
+                        "$ref": "#/components/schemas/Item"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "quantity": {
+                                "type": "integer",
+                                "description": "Total quantity of the item, derived from item quantity and content used. Calculated as (item quantity or 1) - used.",
+                                "readOnly": true,
+                                "example": 10
+                            },
+                            "item_quantity": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ],
+                                "description": "Quantity of the original item, such as number of units. May be null if only a single item or is weight or volume based.",
+                                "readOnly": true,
+                                "example": 5
+                            }
+                        }
+                    }
+                ]
+            },
+            "ContentItemsResponse": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/ContentItem"
+                }
             }
         }
     },
@@ -211,6 +315,88 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contents": {
+            "get": {
+                "summary": "List contents",
+                "tags": [
+                    "Contents"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of contents",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItemsResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contents/{code}": {
+            "get": {
+                "summary": "List contents filtered by item identifier or code",
+                "tags": [
+                    "Contents"
+                ],
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Item ID or item code. Numeric values up to 999999 are treated as item IDs; other values may be plain codes or type-prefixed codes."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Filtered contents list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItemsResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/contents/category/{category}": {
+            "get": {
+                "summary": "List contents by item category",
+                "tags": [
+                    "Contents"
+                ],
+                "parameters": [
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Category name used to filter contents."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Contents list filtered by category",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContentItemsResponse"
                                 }
                             }
                         }
