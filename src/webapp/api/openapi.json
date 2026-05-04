@@ -38,7 +38,13 @@
                 "properties": {
                     "error": {
                         "type": "string",
-                        "description": "Error message describing the issue."
+                        "description": "Error message describing the issue.",
+                        "example": "An unexpected error occurred."
+                    },
+                    "status": {
+                        "type": "integer",
+                        "description": "HTTP status code associated with the error.",
+                        "example": 500
                     }
                 },
                 "required": [

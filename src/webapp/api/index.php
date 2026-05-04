@@ -82,6 +82,7 @@ if (!$api_found) {
 if ($error) {
     $response = array(
         'error' => $error,
+        'status' => $status,
     );
 }
 
