@@ -35,7 +35,7 @@ function api_login($api, $method, $params, $data) {
 
     // Check we have the basic data we need
     if (!$user || !$password) {
-        return api_error("Invalid email or password");
+        return api_error("Invalid email or password", 401);
     }
 
     // Get user record
@@ -47,12 +47,12 @@ function api_login($api, $method, $params, $data) {
     // Ensure we have a row
     $result = $stmt->get_result();
     if (!($row = $result->fetch_assoc())) {
-        return api_error("Invalid email or password");
+        return api_error("Invalid email or password", 401);
     }
 
     // Verify the password hashes to the stored hash
     if (!password_verify($password, $row['password_hash'])) {
-        return api_error("Invalid email or password");
+        return api_error("Invalid email or password", 401);
     }
 
     // If the password needs rehashing, do it and update the database
