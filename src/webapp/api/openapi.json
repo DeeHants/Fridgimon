@@ -19,7 +19,19 @@
             "description": "Local docker instance"
         }
     ],
+    "security": [
+        {
+            "bearerAuth": []
+        }
+    ],
     "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "Bearer"
+            }
+        },
         "schemas": {
             "ErrorResponse": {
                 "type": "object",
@@ -31,6 +43,55 @@
                 },
                 "required": [
                     "error"
+                ]
+            },
+            "SessionCreateRequest": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "Email address of the user.",
+                        "example": "user@example.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password",
+                        "description": "Password for the user account.",
+                        "example": "password"
+                    },
+                    "client": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "Identifier for the client application.",
+                        "example": "EB web application"
+                    }
+                },
+                "required": [
+                    "email",
+                    "password"
+                ]
+            },
+            "SessionResponse": {
+                "type": "object",
+                "properties": {
+                    "user_id": {
+                        "type": "integer",
+                        "description": "Unique numeric ID for the user.",
+                        "readOnly": true,
+                        "example": 1
+                    },
+                    "token": {
+                        "type": "string",
+                        "description": "Bearer token for authenticating subsequent API requests..",
+                        "example": "1:8cf4...:bBat..."
+                    }
+                },
+                "required": [
+                    "user_id",
+                    "token"
                 ]
             },
             "Item": {
@@ -274,6 +335,47 @@
                 }
             }
         },
+        "/session": {
+            "post": {
+                "summary": "Create a new session (login)",
+                "tags": [
+                    "Session"
+                ],
+                "security": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SessionCreateRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Session created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SessionResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorised - Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/item": {
             "post": {
                 "summary": "Register a new item",
@@ -300,6 +402,16 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorised request.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -309,6 +421,9 @@
                 "summary": "Lookup an item by ID, code, or type:code",
                 "tags": [
                     "Item"
+                ],
+                "security": [
+                    {}
                 ],
                 "parameters": [
                     {
@@ -361,6 +476,16 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorised",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -402,6 +527,16 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorised",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -433,6 +568,16 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorised",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -450,6 +595,16 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ContentItemsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorised",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
@@ -484,6 +639,16 @@
                                 }
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorised",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -512,6 +677,16 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ContentItemsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorised",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
                                 }
                             }
                         }
