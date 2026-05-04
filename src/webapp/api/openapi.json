@@ -32,6 +32,99 @@
                 "required": [
                     "error"
                 ]
+            },
+            "Item": {
+                "type": "object",
+                "properties": {
+                    "item_id": {
+                        "type": "integer",
+                        "description": "Unique numeric ID for the item.",
+                        "readOnly": true,
+                        "example": 2
+                    },
+                    "code": {
+                        "type": "string",
+                        "description": "Item code, such as a barcode number or other identifier.",
+                        "example": "5000128104517"
+                    },
+                    "code_type": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "Type of the item code, such as 'EAN13' for barcodes. May be null if code type is unknown.",
+                        "example": "EAN13"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name or description of the item.",
+                        "example": "Whole milk - 4 pints"
+                    },
+                    "quantity": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "description": "Quantity of the item, such as number of units. May be null if only a single item or is weight or volume based.",
+                        "default": "1"
+                    },
+                    "variant": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "Variant or additional description of the item, such as brand or packaging details. May be null if not applicable.",
+                        "example": "Co-op"
+                    },
+                    "category": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "description": "Category of the item, such as 'milk' or 'vegetables'. May be null if not categorized.",
+                        "example": "milk"
+                    },
+                    "life": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "description": "Typical shelf life of the item in days. Used as a default for expiry calculations when adding to contents. May be null if the item does not expire.",
+                        "example": 10
+                    },
+                    "expires": {
+                        "type": "boolean",
+                        "description": "Indicates whether the item is perishable and has an expiry date.",
+                        "readOnly": true,
+                        "example": true
+                    }
+                },
+                "required": [
+                    "item_id",
+                    "code",
+                    "name",
+                    "life"
+                ]
+            },
+            "ItemResponse": {
+                "allOf": [
+                    {
+                        "type": "object",
+                        "properties": {
+                            "found": {
+                                "type": "boolean",
+                                "description": "Indicates whether the item was found in the database.",
+                                "readOnly": true
+                            }
+                        },
+                        "required": [
+                            "found"
+                        ]
+                    },
+                    {
+                        "$ref": "#/components/schemas/Item"
+                    }
+                ]
             }
         }
     },
@@ -57,6 +150,67 @@
                                     "required": [
                                         "hello"
                                     ]
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/item": {
+            "post": {
+                "summary": "Register a new item",
+                "tags": [
+                    "Item"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Item"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Item registered successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ItemResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/item/{code}": {
+            "get": {
+                "summary": "Lookup an item by ID, code, or type:code",
+                "tags": [
+                    "Item"
+                ],
+                "parameters": [
+                    {
+                        "name": "code",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Numeric item ID, plain code, or type-prefixed code (for example 'EAN13:5000128104517')."
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Item lookup response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ItemResponse"
                                 }
                             }
                         }
