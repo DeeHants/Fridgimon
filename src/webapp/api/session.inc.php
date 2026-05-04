@@ -6,6 +6,12 @@ $apis[] = [
     'handler' => "api_login",
     'allow_anonymous' => true,
 ];
+$apis[] = [
+    # GET /session
+    'pattern' => 'session',
+    'methods' => ["GET"],
+    'handler' => "api_get_session",
+];
 
 // Terminology:
 // "password hash" one way hash (currently bcrypt 12) of the user's password with a random salt.
@@ -33,7 +39,7 @@ function api_login($api, $method, $params, $data) {
     }
 
     // Get user record
-    $stmt = $mysqli->prepare("SELECT `user_id`, `email`, `password_hash`, `token_key` FROM `users` WHERE `email`=?");
+    $stmt = $mysqli->prepare("SELECT `user_id`, `name`, `email`, `password_hash`, `token_key` FROM `users` WHERE `email`=?");
     $stmt->bind_param("s", $user);
     $stmt->execute();
     if ($mysqli->error) { return api_error($mysqli->error); }
@@ -85,7 +91,35 @@ function api_login($api, $method, $params, $data) {
 
     $response = [
         'user_id' => $row['user_id'],
+        'name' => $row['name'],
+        'email' => $row['email'],
         'token' => $token,
+    ];
+
+    return [
+        'response' => $response,
+    ];
+}
+
+function api_get_session($api, $method, $params, $data) {
+    global $mysqli, $user_id;
+
+    // Get user record
+    $stmt = $mysqli->prepare("SELECT `user_id`, `name`, `email` FROM `users` WHERE `user_id`=?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    if ($mysqli->error) { return api_error($mysqli->error); }
+
+    // Ensure we have a row
+    $result = $stmt->get_result();
+    if (!($row = $result->fetch_assoc())) {
+        return api_error("User not found", 404);
+    }
+
+    $response = [
+        'user_id' => $row['user_id'],
+        'name' => $row['name'],
+        'email' => $row['email'],
     ];
 
     return [

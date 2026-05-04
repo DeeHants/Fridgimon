@@ -45,36 +45,7 @@
                     "error"
                 ]
             },
-            "SessionCreateRequest": {
-                "type": "object",
-                "properties": {
-                    "email": {
-                        "type": "string",
-                        "format": "email",
-                        "description": "Email address of the user.",
-                        "example": "user@example.com"
-                    },
-                    "password": {
-                        "type": "string",
-                        "format": "password",
-                        "description": "Password for the user account.",
-                        "example": "password"
-                    },
-                    "client": {
-                        "type": [
-                            "string",
-                            "null"
-                        ],
-                        "description": "Identifier for the client application.",
-                        "example": "EB web application"
-                    }
-                },
-                "required": [
-                    "email",
-                    "password"
-                ]
-            },
-            "SessionResponse": {
+            "User": {
                 "type": "object",
                 "properties": {
                     "user_id": {
@@ -83,15 +54,83 @@
                         "readOnly": true,
                         "example": 1
                     },
-                    "token": {
+                    "name": {
                         "type": "string",
-                        "description": "Bearer token for authenticating subsequent API requests..",
-                        "example": "1:8cf4...:bBat..."
+                        "description": "Name of the user.",
+                        "example": "User"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "Email address of the user.",
+                        "example": "user@example.com"
                     }
                 },
                 "required": [
                     "user_id",
-                    "token"
+                    "email"
+                ]
+            },
+            "SessionCreateRequest": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "name": null,
+                            "password": {
+                                "type": "string",
+                                "format": "password",
+                                "description": "Password for the user account.",
+                                "writeOnly": true,
+                                "example": "password"
+                            },
+                            "client": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "description": "Identifier for the client application.",
+                                "example": "EB web application"
+                            }
+                        },
+                        "required": [
+                            "password"
+                        ]
+                    }
+                ]
+            },
+            "SessionCreateResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "token": {
+                                "type": "string",
+                                "description": "Bearer token for authenticating subsequent API requests..",
+                                "example": "1:8cf4...:bBat..."
+                            }
+                        },
+                        "required": [
+                            "token"
+                        ]
+                    }
+                ]
+            },
+            "SessionResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {}
+                    }
                 ]
             },
             "Item": {
@@ -359,13 +398,41 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/SessionResponse"
+                                    "$ref": "#/components/schemas/SessionCreateResponse"
                                 }
                             }
                         }
                     },
                     "401": {
                         "description": "Unauthorised - Invalid credentials",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "summary": "Get session information for the current token",
+                "tags": [
+                    "Session"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Session info returned",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SessionResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorised request.",
                         "content": {
                             "application/json": {
                                 "schema": {

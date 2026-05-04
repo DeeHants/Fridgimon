@@ -41,19 +41,17 @@ foreach ($apis as $api) {
     if (preg_match($pattern, $path, $matches) !== 1) {
         continue;
     }
+    // Supported methods
+    if (array_search($method, $api['methods']) === false) {
+        continue;
+    }
+
     $api_found = true;
 
     // Check authentication if required
     if ((($api['allow_anonymous'] ?? false) === false) && !$user_id) {
         $status = 401;
         $error = "This API requires authentication";
-        break;
-    }
-
-    // Supported methods
-    if (array_search($method, $api['methods']) === false) {
-        $status = 405;
-        $error = "This API doesn't accept $method calls";
         break;
     }
 
